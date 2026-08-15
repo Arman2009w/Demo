@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ClubSphere — Global School Clubs Directory</title>
+<meta name="description" content="Browse a registered directory of schools from around the world and explore the clubs they offer." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌐</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Animated background -->
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-glow bg-glow--one" aria-hidden="true"></div>
+  <div class="bg-glow bg-glow--two" aria-hidden="true"></div>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="navbar__inner">
+      <a href="#top" class="brand">
+        <span class="brand__mark">◆</span>
+        <span class="brand__text">Club<span class="accent">Sphere</span></span>
+      </a>
+      <nav class="navbar__links">
+        <a href="#explore">Explore</a>
+        <a href="#stats">Network</a>
+        <a href="#register">Register a School</a>
+      </nav>
+      <button class="navbar__cta" id="scrollToExplore">Launch Directory</button>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" id="top">
+    <div class="hero__inner">
+      <span class="pill">
+        <span class="pill__dot"></span>
+        Live registry &middot; <span id="heroSchoolCount">0</span> schools &middot; <span id="heroClubCount">0</span> clubs
+      </span>
+      <h1 class="hero__title">
+        Discover school clubs<br />
+        from <span class="accent">every corner</span> of the globe.
+      </h1>
+      <p class="hero__subtitle">
+        ClubSphere connects a registered directory of schools across countries and continents,
+        so students and educators can browse what's happening beyond the classroom — from robotics
+        labs in Tokyo to debate societies in Nairobi.
+      </p>
+
+      <div class="hero__search" id="heroSearchBar">
+        <svg class="hero__search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="searchInput" placeholder="Search by school, city, or country…" autocomplete="off" />
+        <button class="hero__search-clear" id="clearSearch" title="Clear search" aria-label="Clear search">✕</button>
+      </div>
+
+      <div class="hero__tags">
+        <span>Try:</span>
+        <button class="tag-btn" data-query="Japan">Japan</button>
+        <button class="tag-btn" data-query="Robotics">Robotics</button>
+        <button class="tag-btn" data-query="Kenya">Kenya</button>
+        <button class="tag-btn" data-query="Debate">Debate</button>
+        <button class="tag-btn" data-query="Brazil">Brazil</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="stats" id="stats">
+    <div class="stats__inner">
+      <div class="stat-card">
+        <span class="stat-card__value" id="statSchools">0</span>
+        <span class="stat-card__label">Registered Schools</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card__value" id="statCountries">0</span>
+        <span class="stat-card__label">Countries</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card__value" id="statClubs">0</span>
+        <span class="stat-card__label">Active Clubs</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card__value" id="statCategories">0</span>
+        <span class="stat-card__label">Club Categories</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Explore -->
+  <section class="explore" id="explore">
+    <div class="explore__header">
+      <div>
+        <h2>Explore the registry</h2>
+        <p>Filter the global school list, then open a school to see its full club lineup.</p>
+      </div>
+      <div class="view-toggle" role="group" aria-label="View mode">
+        <button class="view-toggle__btn is-active" data-view="grid" aria-label="Grid view">▦</button>
+        <button class="view-toggle__btn" data-view="list" aria-label="List view">☰</button>
+      </div>
+    </div>
+
+    <div class="filters">
+      <div class="filter-group">
+        <label for="continentFilter">Continent</label>
+        <select id="continentFilter">
+          <option value="all">All continents</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="countryFilter">Country</label>
+        <select id="countryFilter">
+          <option value="all">All countries</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="clubFilter">Club category</label>
+        <select id="clubFilter">
+          <option value="all">All categories</option>
+        </select>
+      </div>
+      <div class="filter-group filter-group--sort">
+        <label for="sortSelect">Sort by</label>
+        <select id="sortSelect">
+          <option value="name-asc">Name (A–Z)</option>
+          <option value="name-desc">Name (Z–A)</option>
+          <option value="clubs-desc">Most clubs</option>
+          <option value="students-desc">Largest enrollment</option>
+        </select>
+      </div>
+      <button class="filter-reset" id="resetFilters">Reset</button>
+    </div>
+
+    <p class="results-count" id="resultsCount"></p>
+
+    <div class="school-grid" id="schoolGrid"></div>
+    <div class="empty-state" id="emptyState" hidden>
+      <span class="empty-state__icon">🔎</span>
+      <h3>No schools match your filters</h3>
+      <p>Try clearing a filter or searching a different term.</p>
+      <button class="filter-reset" id="emptyReset">Clear all filters</button>
+    </div>
+  </section>
+
+  <!-- Register CTA -->
+  <section class="register" id="register">
+    <div class="register__card">
+      <div class="register__text">
+        <h2>Is your school part of the registry?</h2>
+        <p>ClubSphere's directory is community-maintained. Schools are added to the registered list with a name, location, enrollment size, and their full club catalog — all stored locally in this site's dataset.</p>
+      </div>
+      <button class="register__btn" id="registerBtn">View registration format</button>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer__inner">
+      <span>◆ ClubSphere — a static, front-end-only global clubs directory.</span>
+      <span>Built with HTML, CSS &amp; JavaScript.</span>
+    </div>
+  </footer>
+
+  <!-- School detail modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalSchoolName">
+      <button class="modal__close" id="modalClose" aria-label="Close">✕</button>
+      <div class="modal__header">
+        <span class="modal__flag" id="modalFlag">🏫</span>
+        <div>
+          <h2 id="modalSchoolName">School name</h2>
+          <p id="modalLocation" class="modal__location">City, Country</p>
+        </div>
+      </div>
+      <div class="modal__meta" id="modalMeta"></div>
+      <p class="modal__description" id="modalDescription"></p>
+      <div class="modal__clubs-header">
+        <h3>Clubs &amp; Activities</h3>
+        <span id="modalClubCount" class="modal__club-count"></span>
+      </div>
+      <div class="modal__clubs" id="modalClubs"></div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
