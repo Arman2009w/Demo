@@ -21,7 +21,7 @@
   "use strict";
 
   const CONFIG = {
-    GOOGLE_CLIENT_ID: "" // <-- put your Google OAuth Client ID here
+    GOOGLE_CLIENT_ID: 710729698743-i9tjrhbmiqceuhd288lpj61ll732l0vh.apps.googleusercontent.com // <-- put your Google OAuth Client ID here
   };
 
   const USERS_KEY = "clubsphere_users";
