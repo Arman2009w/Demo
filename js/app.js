@@ -383,21 +383,31 @@
     `;
 
     modalClubs.innerHTML = school.clubs
-      .map(
-        (club) => `
+      .map((club) => {
+        const joinBlock = club.openMembership
+          ? window.ClubSphereMembership.renderJoinBlock(
+              window.ClubSphereMembership.getClubKey(school.id, club.name),
+              club.name,
+              club.joinNote || "Open to students everywhere."
+            )
+          : "";
+
+        return `
         <div class="club-card">
           <div class="club-card__header">
             <span class="club-card__icon">${club.icon}</span>
             <div>
               <h4>${escapeHtml(club.name)}</h4>
               <span class="club-card__category">${escapeHtml(club.category)}</span>
+              ${club.openMembership ? '<span class="club-card__open-badge">🌍 Open worldwide</span>' : ""}
             </div>
           </div>
           <p class="club-card__desc">${escapeHtml(club.description)}</p>
           <p class="club-card__meets">🕒 ${escapeHtml(club.meets)}</p>
+          ${joinBlock}
         </div>
-      `
-      )
+      `;
+      })
       .join("");
 
     modalOverlay.classList.add("is-open");

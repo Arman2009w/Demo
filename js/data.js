@@ -364,6 +364,150 @@ const SCHOOL_REGISTRY = [
       { name: "Robotics Club", category: "STEM", icon: "🤖", meets: "Mon, 3:30 PM", description: "Builds bots for the Thailand robotics championship circuit." },
       { name: "Culinary Club", category: "Arts", icon: "🍜", meets: "Fri, 3:30 PM", description: "Explores regional Thai cuisine with a hands-on cooking studio." }
     ]
+  },
+  {
+    id: "in-doon-school",
+    name: "The Doon School",
+    city: "Dehradun",
+    country: "India",
+    continent: "Asia",
+    flag: "🇮🇳",
+    students: 550,
+    founded: 1935,
+    description: "India's most storied boarding school, known for its sprawling Himalayan-foothill campus and a famously wide-ranging 'hobbies' program.",
+    clubs: [
+      { name: "Doon School Weekly", category: "Media & Publishing", icon: "📰", meets: "Fri, 4:00 PM", description: "One of India's oldest student-run newspapers, published continuously since 1936." },
+      { name: "Photographic Society", category: "Arts", icon: "📷", meets: "Wed, 3:30 PM", description: "Darkroom and digital photography, with prints exhibited each term." },
+      { name: "Astronomical Society", category: "STEM", icon: "🔭", meets: "Fri, 8:00 PM", description: "Night-sky observation sessions using the school's telescope." },
+      { name: "Riding Club", category: "Sports", icon: "🐎", meets: "Tue & Sat, 6:30 AM", description: "Equestrian training on the school's own stables and riding ground." },
+      { name: "Doon Global Naturalists Network", category: "Community Service", icon: "🌿", meets: "Monthly, online", description: "A citizen-science chapter running bird counts and habitat journaling with student naturalists everywhere.", openMembership: true, joinNote: "Open to students at any school, anywhere — join the monthly virtual bird count and habitat-journaling sessions." }
+    ]
+  },
+  {
+    id: "in-mayo-college",
+    name: "Mayo College",
+    city: "Ajmer",
+    country: "India",
+    continent: "Asia",
+    flag: "🇮🇳",
+    students: 900,
+    founded: 1875,
+    description: "Once founded for the sons of Rajput nobility, now a leading co-ed boarding school famed for its palatial campus and equestrian tradition.",
+    clubs: [
+      { name: "Polo & Equestrian Club", category: "Sports", icon: "🐎", meets: "Daily, 6:00 AM", description: "One of the school's oldest traditions, training on its own polo grounds." },
+      { name: "Heritage Conservation Society", category: "Community Service", icon: "🏛️", meets: "Sat, 10:00 AM", description: "Documents and helps preserve Ajmer's historic monuments." },
+      { name: "Robotics & Electronics Club", category: "STEM", icon: "🤖", meets: "Tue & Thu, 4:00 PM", description: "Circuit-building and competitive robotics projects." },
+      { name: "Western & Classical Music Society", category: "Arts", icon: "🎻", meets: "Mon, 4:00 PM", description: "Orchestral and classical Indian music ensembles performing each term." },
+      { name: "Young Diplomats Circle", category: "Academic", icon: "🕊️", meets: "Monthly, online", description: "A virtual Model UN chapter hosting monthly video-conference sessions.", openMembership: true, joinNote: "A virtual Model UN chapter — open to student delegates from any school worldwide for monthly online conferences." }
+    ]
+  },
+  {
+    id: "in-scindia-school",
+    name: "The Scindia School",
+    city: "Gwalior",
+    country: "India",
+    continent: "Asia",
+    flag: "🇮🇳",
+    students: 600,
+    founded: 1897,
+    description: "A boys' boarding school set inside the historic Gwalior Fort, known for its adventure sports and pioneering aeromodelling program.",
+    clubs: [
+      { name: "Aeromodelling Club", category: "STEM", icon: "✈️", meets: "Wed, 4:00 PM", description: "Designs and flies scale model aircraft, a decades-old Scindia tradition." },
+      { name: "Mountaineering & Adventure Club", category: "Sports", icon: "🧗", meets: "Sat, 6:00 AM", description: "Rock-climbing and trekking expeditions in the surrounding hills." },
+      { name: "Fort Heritage Trust", category: "Community Service", icon: "🏰", meets: "Sun, 10:00 AM", description: "Student-led conservation and guided-tour project for the school's fort campus." },
+      { name: "Western Classical Orchestra", category: "Arts", icon: "🎻", meets: "Tue, 4:00 PM", description: "Full orchestral ensemble performing at the school's annual founder's day." },
+      { name: "Coders' Guild", category: "STEM", icon: "💻", meets: "Weekly, online", description: "An open-source coding collective running remote hackathons.", openMembership: true, joinNote: "Runs virtual hackathons and open-source projects anyone can join remotely, no matter what school you attend." }
+    ]
+  },
+  {
+    id: "in-la-martiniere",
+    name: "La Martiniere College",
+    city: "Lucknow",
+    country: "India",
+    continent: "Asia",
+    flag: "🇮🇳",
+    students: 1100,
+    founded: 1845,
+    description: "One of India's oldest English-medium schools, housed in a striking Gothic building and known for its disciplined tradition and debate culture.",
+    clubs: [
+      { name: "National Cadet Corps", category: "Community Service", icon: "🎖️", meets: "Sat, 7:00 AM", description: "Discipline, drill, and leadership training with a century-long school tradition." },
+      { name: "Martinian Debating Union", category: "Academic", icon: "🗣️", meets: "Wed, 4:00 PM", description: "Competitive debate training for state and national tournaments." },
+      { name: "Heritage Architecture Society", category: "Arts", icon: "🏛️", meets: "Fri, 3:30 PM", description: "Studies and documents the school's landmark 19th-century architecture." },
+      { name: "Cricket Club", category: "Sports", icon: "🏏", meets: "Daily, 4:00 PM", description: "One of Lucknow's oldest school cricket programs." },
+      { name: "Global Debate Exchange", category: "Academic", icon: "🌐", meets: "Monthly, online", description: "A virtual debate circuit connecting Martinian debaters with teams abroad.", openMembership: true, joinNote: "Monthly video-conference debate rounds open to student teams from any country." }
+    ]
+  },
+  {
+    id: "us-phillips-exeter",
+    name: "Phillips Exeter Academy",
+    city: "Exeter",
+    country: "United States",
+    continent: "North America",
+    flag: "🇺🇸",
+    students: 1090,
+    founded: 1781,
+    description: "An elite boarding school famous for the Harkness table discussion method and a globally diverse student body.",
+    clubs: [
+      { name: "Exeter Robotics Club", category: "STEM", icon: "🤖", meets: "Tue & Thu, 4:00 PM", description: "Builds competition robots for FIRST Robotics regionals." },
+      { name: "The Exonian", category: "Media & Publishing", icon: "📰", meets: "Sun, 6:00 PM", description: "The oldest continuously-published prep school newspaper in the country." },
+      { name: "A Cappella Ensemble", category: "Arts", icon: "🎤", meets: "Mon & Wed, 4:00 PM", description: "Student vocal group performing at campus events and off-campus festivals." },
+      { name: "Crew", category: "Sports", icon: "🚣", meets: "Daily, 3:30 PM", description: "Rowing on the Squamscott River, with a full spring regatta season." },
+      { name: "Harkness Discussion Exchange", category: "Academic", icon: "🌐", meets: "Biweekly, online", description: "Open virtual seminars using the Harkness discussion method.", openMembership: true, joinNote: "Free virtual Harkness-style seminars on global issues — open to students at any school." }
+    ]
+  },
+  {
+    id: "us-phillips-andover",
+    name: "Phillips Academy Andover",
+    city: "Andover",
+    country: "United States",
+    continent: "North America",
+    flag: "🇺🇸",
+    students: 1150,
+    founded: 1778,
+    description: "One of America's oldest secondary schools, known for need-blind admissions and a strong tradition of civic engagement.",
+    clubs: [
+      { name: "Andover Robotics", category: "STEM", icon: "🤖", meets: "Mon & Thu, 4:00 PM", description: "Designs and builds robots for regional and national competitions." },
+      { name: "Philomathean Society", category: "Academic", icon: "📚", meets: "Wed, 4:00 PM", description: "The school's historic literary and debate society, founded in 1811." },
+      { name: "Astronomy Club", category: "STEM", icon: "🔭", meets: "Fri, 8:00 PM", description: "Observatory nights and telescope-building workshops." },
+      { name: "Ultimate Frisbee Club", category: "Sports", icon: "🥏", meets: "Tue & Sat, 3:30 PM", description: "Casual and competitive play with a spring tournament circuit." },
+      { name: "Andover Coding Collective", category: "STEM", icon: "💻", meets: "Weekly, online", description: "A student-led open-source group running public coding workshops.", openMembership: true, joinNote: "Public coding workshops and open-source projects — anyone, anywhere, can join in online." }
+    ]
+  },
+  {
+    id: "us-stuyvesant",
+    name: "Stuyvesant High School",
+    city: "New York City",
+    country: "United States",
+    continent: "North America",
+    flag: "🇺🇸",
+    students: 3300,
+    founded: 1904,
+    description: "A specialized public STEM high school in Manhattan known for its rigorous admissions exam and powerhouse robotics and debate teams.",
+    clubs: [
+      { name: "StuyPulse Robotics", category: "STEM", icon: "🤖", meets: "Daily, 3:30 PM", description: "Stuyvesant's FIRST Robotics Competition team, a fixture of the NYC regional." },
+      { name: "Speech & Debate Team", category: "Academic", icon: "🗣️", meets: "Tue & Thu, 4:00 PM", description: "Competes across national circuit tournaments in multiple debate formats." },
+      { name: "The Spectator", category: "Media & Publishing", icon: "📰", meets: "Mon, 4:00 PM", description: "Stuyvesant's student newspaper, published since 1915." },
+      { name: "Big Sibs Program", category: "Community Service", icon: "🤝", meets: "Ongoing", description: "Pairs upperclassmen with incoming freshmen for mentorship and orientation." },
+      { name: "Global Speech Exchange", category: "Academic", icon: "🌐", meets: "Monthly, online", description: "Online debate scrimmages with student speakers from other countries.", openMembership: true, joinNote: "Monthly online debate scrimmages open to student speakers from any country." }
+    ]
+  },
+  {
+    id: "us-tjhsst",
+    name: "Thomas Jefferson High School for Science and Technology",
+    city: "Alexandria",
+    country: "United States",
+    continent: "North America",
+    flag: "🇺🇸",
+    students: 1850,
+    founded: 1985,
+    description: "A magnet school for science and technology with student research labs spanning neuroscience, robotics, and quantum computing.",
+    clubs: [
+      { name: "TJ Robotics", category: "STEM", icon: "🤖", meets: "Tue & Thu, 4:00 PM", description: "Builds and competes with robots across multiple FIRST leagues." },
+      { name: "Science Research Symposium", category: "STEM", icon: "🔬", meets: "Wed, 3:30 PM", description: "Showcases student-led original research across every science discipline." },
+      { name: "Model UN", category: "Academic", icon: "🏛️", meets: "Mon, 4:00 PM", description: "Competes at Model UN conferences up and down the East Coast." },
+      { name: "Science Bowl Team", category: "Academic", icon: "🧠", meets: "Fri, 3:30 PM", description: "Fast-paced academic quiz competition covering all of STEM." },
+      { name: "Open Research Mentorship Network", category: "STEM", icon: "🌐", meets: "Ongoing, online", description: "Pairs TJ researchers with student scientists elsewhere for virtual mentorship.", openMembership: true, joinNote: "Virtual mentorship pairing TJ student researchers with student scientists anywhere in the world." }
+    ]
   }
 ];
 

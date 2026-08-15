@@ -1228,6 +1228,7 @@ select, input {
   position: absolute;
   top: 20px;
   right: 20px;
+  z-index: 5;
   width: 34px;
   height: 34px;
   border-radius: 50%;
@@ -1414,6 +1415,107 @@ select, input {
 .club-card__meets {
   font-size: 0.78rem;
   color: var(--text-muted);
+}
+
+.club-card__open-badge {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(53, 224, 201, 0.14);
+  color: var(--accent-2);
+  font-weight: 600;
+}
+
+/* ---------- Club membership (join) ---------- */
+.club-join {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border);
+}
+
+.club-join__note {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+}
+
+.club-join__btn {
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  background: var(--gradient);
+  color: #0a0a12;
+  font-weight: 600;
+  font-size: 0.8rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.club-join__btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(124, 92, 255, 0.3);
+}
+
+.club-join__form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.club-join__form input {
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  font-size: 0.82rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.club-join__form input:focus {
+  border-color: var(--accent);
+}
+
+.club-join__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.club-join__submit {
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  background: var(--gradient);
+  color: #0a0a12;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.club-join__cancel {
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
+}
+
+.club-join__cancel:hover {
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+}
+
+.club-join--done {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.club-join__check {
+  color: var(--accent-2);
+  font-weight: 700;
 }
 
 /* ---------- Register-a-school modal ---------- */
