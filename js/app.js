@@ -48,6 +48,42 @@
     return `linear-gradient(135deg, ${c1} 0%, ${c2} 100%)`;
   }
 
+  // Flag emoji rely on the OS font composing regional-indicator letter
+  // pairs into a flag glyph — Windows' Segoe UI Emoji deliberately doesn't,
+  // so flags there render as raw two-letter codes ("NZ", "TH", ...). Real
+  // flag images sidestep that entirely. Falls back to the stored emoji for
+  // any country not in this list (e.g. an unrecognized custom submission).
+  const COUNTRY_CODES = {
+    Afghanistan: "af", Albania: "al", Algeria: "dz", Argentina: "ar", Armenia: "am",
+    Australia: "au", Austria: "at", Bangladesh: "bd", Belgium: "be", Bolivia: "bo",
+    Brazil: "br", Bulgaria: "bg", Cambodia: "kh", Canada: "ca", Chile: "cl",
+    China: "cn", Colombia: "co", "Costa Rica": "cr", Croatia: "hr", Cuba: "cu",
+    Cyprus: "cy", Czechia: "cz", "Czech Republic": "cz", Denmark: "dk", "Dominican Republic": "do",
+    Ecuador: "ec", Egypt: "eg", Estonia: "ee", Ethiopia: "et", Finland: "fi",
+    France: "fr", Georgia: "ge", Germany: "de", Ghana: "gh", Greece: "gr",
+    Guatemala: "gt", Hungary: "hu", Iceland: "is", India: "in", Indonesia: "id",
+    Iran: "ir", Iraq: "iq", Ireland: "ie", Israel: "il", Italy: "it",
+    Jamaica: "jm", Japan: "jp", Jordan: "jo", Kenya: "ke", "South Korea": "kr",
+    Kuwait: "kw", Latvia: "lv", Lebanon: "lb", Lithuania: "lt", Luxembourg: "lu",
+    Malaysia: "my", Malta: "mt", Mexico: "mx", Morocco: "ma", Nepal: "np",
+    Netherlands: "nl", "New Zealand": "nz", Nigeria: "ng", Norway: "no", Pakistan: "pk",
+    Panama: "pa", Paraguay: "py", Peru: "pe", Philippines: "ph", Poland: "pl",
+    Portugal: "pt", Qatar: "qa", Romania: "ro", Russia: "ru", "Saudi Arabia": "sa",
+    Serbia: "rs", Singapore: "sg", Slovakia: "sk", Slovenia: "si", "South Africa": "za",
+    Spain: "es", "Sri Lanka": "lk", Sweden: "se", Switzerland: "ch", Taiwan: "tw",
+    Thailand: "th", Tunisia: "tn", Turkey: "tr", Ukraine: "ua", "United Arab Emirates": "ae",
+    "United Kingdom": "gb", "United States": "us", Uruguay: "uy", Venezuela: "ve", Vietnam: "vn"
+  };
+
+  function getFlagContent(school) {
+    const code = COUNTRY_CODES[school.country];
+    if (code) {
+      const fallback = escapeHtml(school.flag);
+      return `<img class="flag-img" src="https://flagcdn.com/${code}.svg" alt="${escapeHtml(school.country)} flag" loading="lazy" data-fallback="${fallback}" onerror="this.replaceWith(document.createTextNode(this.dataset.fallback))" />`;
+    }
+    return escapeHtml(school.flag);
+  }
+
   // ---------- DOM references ----------
   const schoolGrid = document.getElementById("schoolGrid");
   const emptyState = document.getElementById("emptyState");
@@ -323,7 +359,7 @@
       <div class="school-card__media" style="background-image: ${getBannerGradient(school.id)}">
         ${school.custom ? '<span class="school-card__badge">Community</span>' : ""}
         <span class="school-card__club-count">${school.clubs.length} clubs</span>
-        <span class="school-card__media-flag">${school.flag}</span>
+        <span class="school-card__media-flag">${getFlagContent(school)}</span>
       </div>
       <h3 class="school-card__name">${escapeHtml(school.name)}</h3>
       <p class="school-card__location">${escapeHtml(school.city)}, ${escapeHtml(school.country)}</p>
@@ -351,7 +387,7 @@
 
   // ---------- Modal ----------
   function openModal(school) {
-    modalFlag.textContent = school.flag;
+    modalFlag.innerHTML = getFlagContent(school);
     modalMedia.style.backgroundImage = getBannerGradient(school.id);
     modalBadge.hidden = !school.custom;
     modalSchoolName.textContent = school.name;

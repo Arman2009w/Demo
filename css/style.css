@@ -206,8 +206,14 @@ body.intro-active {
 }
 
 .intro__mark {
-  font-size: 2.6rem;
+  display: flex;
+  justify-content: center;
+  color: var(--accent);
   margin-bottom: 12px;
+}
+
+.intro__mark .knot-icon {
+  width: 2.6rem;
 }
 
 .intro__wordmark {
@@ -274,8 +280,14 @@ body.intro-active {
 }
 
 .brand__mark {
+  display: inline-flex;
   color: var(--accent);
-  font-size: 1.1rem;
+}
+
+.knot-icon {
+  width: 1.3rem;
+  height: auto;
+  display: block;
 }
 
 .navbar__links {
@@ -1129,6 +1141,14 @@ body.intro-active {
   filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
 }
 
+.flag-img {
+  display: block;
+  width: 1.3em;
+  height: auto;
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
 .school-card__club-count {
   position: absolute;
   top: 12px;
@@ -1333,6 +1353,17 @@ body.intro-active {
   gap: 8px;
   font-size: 0.8rem;
   color: var(--text-muted);
+}
+
+.footer__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer__brand .knot-icon {
+  width: 1rem;
+  color: var(--accent);
 }
 
 /* ---------- Modal ---------- */

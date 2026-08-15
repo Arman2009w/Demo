@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Knot — Tying School Communities Together</title>
 <meta name="description" content="Knot ties together a registered directory of schools from around the world so you can explore the clubs they offer." />
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪢</text></svg>" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2238%22 cy=%2250%22 r=%2226%22 fill=%22none%22 stroke=%22%237c5cff%22 stroke-width=%2211%22/><circle cx=%2264%22 cy=%2250%22 r=%2226%22 fill=%22none%22 stroke=%22%2335e0c9%22 stroke-width=%2211%22/></svg>" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css" />
@@ -16,7 +16,12 @@
   <div class="intro" id="introScreen" aria-hidden="true" role="presentation">
     <div class="intro__glow" aria-hidden="true"></div>
     <div class="intro__content">
-      <span class="intro__mark">🪢</span>
+      <span class="intro__mark">
+        <svg class="knot-icon" viewBox="0 0 32 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="12" cy="10" r="7.5" stroke="currentColor" stroke-width="3"/>
+          <circle cx="20" cy="10" r="7.5" stroke="currentColor" stroke-width="3"/>
+        </svg>
+      </span>
       <h1 class="intro__wordmark" id="introWordmark">Knot</h1>
       <p class="intro__tagline" id="introTagline">A platform that ties different school communities together like a knot.</p>
     </div>
@@ -32,7 +37,12 @@
   <header class="navbar">
     <div class="navbar__inner">
       <a href="#top" class="brand">
-        <span class="brand__mark">🪢</span>
+        <span class="brand__mark">
+          <svg class="knot-icon" viewBox="0 0 32 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="12" cy="10" r="7.5" stroke="currentColor" stroke-width="3"/>
+            <circle cx="20" cy="10" r="7.5" stroke="currentColor" stroke-width="3"/>
+          </svg>
+        </span>
         <span class="brand__text accent">Knot</span>
       </a>
       <nav class="navbar__links">
@@ -170,7 +180,13 @@
 
   <footer class="footer">
     <div class="footer__inner">
-      <span>🪢 Knot — a static, front-end-only global clubs directory.</span>
+      <span class="footer__brand">
+        <svg class="knot-icon" viewBox="0 0 32 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="12" cy="10" r="7.5" stroke="currentColor" stroke-width="3"/>
+          <circle cx="20" cy="10" r="7.5" stroke="currentColor" stroke-width="3"/>
+        </svg>
+        Knot — a static, front-end-only global clubs directory.
+      </span>
       <span>Built with HTML, CSS &amp; JavaScript.</span>
     </div>
   </footer>
