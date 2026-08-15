@@ -1134,11 +1134,16 @@ body.intro-active {
   background-image: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.09) 0 2px, transparent 2px 16px);
 }
 
-.school-card__media-flag {
-  position: relative;
-  z-index: 1;
-  font-size: 2.6rem;
-  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
+.school-card__media--photo::after {
+  background-image: linear-gradient(180deg, rgba(6, 7, 13, 0.05) 35%, rgba(6, 7, 13, 0.6) 100%);
+}
+
+.school-card__media-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .flag-img {
@@ -1147,6 +1152,16 @@ body.intro-active {
   height: auto;
   border-radius: 3px;
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+.flag-inline {
+  display: inline-flex;
+  vertical-align: -0.15em;
+  margin-right: 6px;
+}
+
+.flag-inline .flag-img {
+  width: 1.1em;
 }
 
 .school-card__club-count {
@@ -1213,10 +1228,6 @@ body.intro-active {
   margin: 0;
   border-radius: var(--radius-sm);
   flex-shrink: 0;
-}
-
-.school-grid--list .school-card__media-flag {
-  font-size: 1.6rem;
 }
 
 .school-grid--list .school-card__club-count,
@@ -1444,11 +1455,16 @@ body.intro-active {
   background-image: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.09) 0 2px, transparent 2px 16px);
 }
 
-.modal__flag {
-  position: relative;
-  z-index: 1;
-  font-size: 3rem;
-  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+.modal__media--photo::after {
+  background-image: linear-gradient(180deg, rgba(6, 7, 13, 0.05) 35%, rgba(6, 7, 13, 0.6) 100%);
+}
+
+.modal__media-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .modal__badge {

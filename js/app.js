@@ -105,7 +105,6 @@
   const modalClose = document.getElementById("modalClose");
   const modalMedia = document.getElementById("modalMedia");
   const modalBadge = document.getElementById("modalBadge");
-  const modalFlag = document.getElementById("modalFlag");
   const modalSchoolName = document.getElementById("modalSchoolName");
   const modalLocation = document.getElementById("modalLocation");
   const modalSubmittedBy = document.getElementById("modalSubmittedBy");
@@ -356,13 +355,17 @@
     const extraCategories = uniqueSorted(school.clubs.map((c) => c.category)).length - categories.length;
 
     card.innerHTML = `
-      <div class="school-card__media" style="background-image: ${getBannerGradient(school.id)}">
+      <div class="school-card__media${school.photo ? " school-card__media--photo" : ""}" style="background-image: ${getBannerGradient(school.id)}">
+        ${
+          school.photo
+            ? `<img class="school-card__media-img" src="${school.photo}" alt="${escapeHtml(school.name)} campus" loading="lazy" onerror="this.closest('.school-card__media').classList.remove('school-card__media--photo'); this.remove();" />`
+            : ""
+        }
         ${school.custom ? '<span class="school-card__badge">Community</span>' : ""}
         <span class="school-card__club-count">${school.clubs.length} clubs</span>
-        <span class="school-card__media-flag">${getFlagContent(school)}</span>
       </div>
       <h3 class="school-card__name">${escapeHtml(school.name)}</h3>
-      <p class="school-card__location">${escapeHtml(school.city)}, ${escapeHtml(school.country)}</p>
+      <p class="school-card__location"><span class="flag-inline">${getFlagContent(school)}</span>${escapeHtml(school.city)}, ${escapeHtml(school.country)}</p>
       <p class="school-card__desc">${escapeHtml(school.description)}</p>
       <div class="school-card__tags">
         ${categories.map((c) => `<span class="tag">${escapeHtml(c)}</span>`).join("")}
@@ -387,11 +390,27 @@
 
   // ---------- Modal ----------
   function openModal(school) {
-    modalFlag.innerHTML = getFlagContent(school);
     modalMedia.style.backgroundImage = getBannerGradient(school.id);
+    modalMedia.classList.toggle("modal__media--photo", Boolean(school.photo));
+
+    const existingImg = modalMedia.querySelector(".modal__media-img");
+    if (existingImg) existingImg.remove();
+    if (school.photo) {
+      const img = document.createElement("img");
+      img.className = "modal__media-img";
+      img.src = school.photo;
+      img.alt = `${school.name} campus`;
+      img.loading = "lazy";
+      img.onerror = () => {
+        modalMedia.classList.remove("modal__media--photo");
+        img.remove();
+      };
+      modalMedia.insertBefore(img, modalMedia.firstChild);
+    }
+
     modalBadge.hidden = !school.custom;
     modalSchoolName.textContent = school.name;
-    modalLocation.textContent = `${school.city}, ${school.country} · ${school.continent}`;
+    modalLocation.innerHTML = `<span class="flag-inline">${getFlagContent(school)}</span>${escapeHtml(school.city)}, ${escapeHtml(school.country)} · ${escapeHtml(school.continent)}`;
     modalDescription.textContent = school.description;
     modalClubCount.textContent = `${school.clubs.length} clubs`;
 
