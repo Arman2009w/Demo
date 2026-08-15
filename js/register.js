@@ -14,6 +14,10 @@
   let els = {};
   let clubRowCount = 0;
   let toastTimer = null;
+  let selectedPhoto = null;
+
+  const MAX_PHOTO_DIMENSION = 900;
+  const MAX_SOURCE_FILE_BYTES = 20 * 1024 * 1024; // 20MB, before compression
 
   function cacheEls() {
     els = {
@@ -21,6 +25,10 @@
       close: document.getElementById("registerClose"),
       form: document.getElementById("registerForm"),
       name: document.getElementById("rfName"),
+      photoUpload: document.getElementById("photoUpload"),
+      photoInput: document.getElementById("rfPhoto"),
+      photoPreview: document.getElementById("photoPreview"),
+      photoRemove: document.getElementById("photoRemove"),
       city: document.getElementById("rfCity"),
       country: document.getElementById("rfCountry"),
       continent: document.getElementById("rfContinent"),
@@ -58,6 +66,78 @@
     els.clubRows.innerHTML = "";
     clubRowCount = 0;
     addClubRow();
+    resetPhoto();
+  }
+
+  // ---------- photo upload ----------
+  function resetPhoto() {
+    selectedPhoto = null;
+    els.photoInput.value = "";
+    els.photoUpload.classList.remove("photo-upload--has-image");
+    els.photoPreview.style.backgroundImage = "";
+    els.photoPreview.innerHTML = `
+      <svg class="photo-upload__icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.7"/><path d="M21 15l-5-5-9 9"/></svg>
+      <span class="photo-upload__text">Click to upload a photo</span>
+      <span class="photo-upload__hint">JPG or PNG — resized automatically</span>
+    `;
+    els.photoRemove.hidden = true;
+  }
+
+  function handlePhotoFile(file) {
+    els.error.textContent = "";
+
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      els.error.textContent = "Please choose an image file.";
+      return;
+    }
+    if (file.size > MAX_SOURCE_FILE_BYTES) {
+      els.error.textContent = "That image is too large — please choose a file under 20MB.";
+      return;
+    }
+
+    compressImage(file, MAX_PHOTO_DIMENSION)
+      .then((dataUrl) => {
+        selectedPhoto = dataUrl;
+        els.photoUpload.classList.add("photo-upload--has-image");
+        els.photoPreview.style.backgroundImage = `url("${dataUrl}")`;
+        els.photoPreview.innerHTML = `<span class="photo-upload__text">Change photo</span>`;
+        els.photoRemove.hidden = false;
+      })
+      .catch(() => {
+        els.error.textContent = "Couldn't read that image — try a different file.";
+      });
+  }
+
+  function compressImage(file, maxDimension) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          let { width, height } = img;
+          if (width > maxDimension || height > maxDimension) {
+            if (width > height) {
+              height = Math.round((height * maxDimension) / width);
+              width = maxDimension;
+            } else {
+              width = Math.round((width * maxDimension) / height);
+              height = maxDimension;
+            }
+          }
+          const canvas = document.createElement("canvas");
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL("image/jpeg", 0.82));
+        };
+        img.onerror = () => reject(new Error("Could not decode image"));
+        img.src = e.target.result;
+      };
+      reader.onerror = () => reject(new Error("Could not read file"));
+      reader.readAsDataURL(file);
+    });
   }
 
   // ---------- club rows ----------
@@ -160,6 +240,7 @@
       country,
       continent,
       flag,
+      photo: selectedPhoto || undefined,
       students,
       founded,
       description,
@@ -224,6 +305,19 @@
 
     els.addClubBtn.addEventListener("click", () => addClubRow());
     els.form.addEventListener("submit", handleSubmit);
+
+    els.photoUpload.addEventListener("click", () => els.photoInput.click());
+    els.photoUpload.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        els.photoInput.click();
+      }
+    });
+    els.photoInput.addEventListener("change", () => handlePhotoFile(els.photoInput.files[0]));
+    els.photoRemove.addEventListener("click", (e) => {
+      e.stopPropagation();
+      resetPhoto();
+    });
 
     addClubRow();
   }

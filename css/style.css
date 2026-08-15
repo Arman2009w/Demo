@@ -1791,6 +1791,113 @@ body.intro-active {
   padding-right: 32px;
 }
 
+/* ---------- Photo upload ---------- */
+.photo-upload {
+  border-radius: var(--radius-md);
+  border: 1.5px dashed var(--border-strong);
+  background: var(--surface);
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.photo-upload:hover,
+.photo-upload:focus-visible {
+  border-color: var(--accent);
+  background: var(--surface-hover);
+  outline: none;
+}
+
+.photo-upload__preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 140px;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 12px;
+}
+
+.photo-upload__icon {
+  color: var(--text-muted);
+}
+
+.photo-upload__text {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.photo-upload__hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.photo-upload--has-image .photo-upload__preview {
+  height: 160px;
+  padding: 0;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.photo-upload--has-image .photo-upload__icon,
+.photo-upload--has-image .photo-upload__hint {
+  display: none;
+}
+
+.photo-upload--has-image .photo-upload__text {
+  position: relative;
+  z-index: 1;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(10, 10, 18, 0.6);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.photo-upload--has-image:hover .photo-upload__text,
+.photo-upload--has-image:focus-visible .photo-upload__text {
+  opacity: 1;
+}
+
+.photo-upload--has-image .photo-upload__preview::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(6, 7, 13, 0.25);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.photo-upload--has-image:hover .photo-upload__preview::after,
+.photo-upload--has-image:focus-visible .photo-upload__preview::after {
+  opacity: 1;
+}
+
+.photo-upload__remove {
+  margin-top: 8px;
+  font-size: 0.78rem;
+  color: var(--accent-3);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  transition: background 0.2s ease;
+}
+
+.photo-upload__remove:hover {
+  background: rgba(255, 107, 157, 0.1);
+}
+
+.photo-upload__error {
+  font-size: 0.78rem;
+  color: var(--accent-3);
+  margin-top: 6px;
+}
+
 .register-form__clubs-header {
   display: flex;
   align-items: baseline;

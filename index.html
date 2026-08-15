@@ -308,6 +308,18 @@
             <label for="rfName">School name</label>
             <input type="text" id="rfName" maxlength="80" required autocomplete="off" placeholder="e.g. Riverside Academy" />
           </div>
+          <div class="form-field form-field--full">
+            <label for="rfPhoto">School photo (optional)</label>
+            <div class="photo-upload" id="photoUpload" tabindex="0" role="button" aria-label="Upload a school photo">
+              <input type="file" id="rfPhoto" accept="image/*" hidden />
+              <div class="photo-upload__preview" id="photoPreview">
+                <svg class="photo-upload__icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.7"/><path d="M21 15l-5-5-9 9"/></svg>
+                <span class="photo-upload__text">Click to upload a photo</span>
+                <span class="photo-upload__hint">JPG or PNG — resized automatically</span>
+              </div>
+            </div>
+            <button type="button" class="photo-upload__remove" id="photoRemove" hidden>Remove photo</button>
+          </div>
           <div class="form-field">
             <label for="rfCity">City</label>
             <input type="text" id="rfCity" maxlength="60" required autocomplete="off" placeholder="e.g. Lisbon" />

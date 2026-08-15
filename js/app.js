@@ -19,7 +19,13 @@
 
   function persistCustomSchools() {
     const custom = registry.filter((s) => s.custom);
-    localStorage.setItem(CUSTOM_SCHOOLS_KEY, JSON.stringify(custom));
+    try {
+      localStorage.setItem(CUSTOM_SCHOOLS_KEY, JSON.stringify(custom));
+    } catch (e) {
+      // Storage quota exceeded (photos can be large) — the school still
+      // renders for this session, it just won't survive a reload.
+      console.warn("Could not save the registry locally — storage may be full.", e);
+    }
   }
 
   const registry = [...(window.SCHOOL_REGISTRY || []), ...loadCustomSchools()];
