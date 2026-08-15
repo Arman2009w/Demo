@@ -27,7 +27,7 @@
       <nav class="navbar__links">
         <a href="#explore">Explore</a>
         <a href="#stats">Network</a>
-        <a href="#register">Register a School</a>
+        <a href="#register" id="registerNavLink">Register a School</a>
       </nav>
       <div class="navbar__right">
         <button class="navbar__cta" id="scrollToExplore">Launch Directory</button>
@@ -154,9 +154,9 @@
     <div class="register__card">
       <div class="register__text">
         <h2>Is your school part of the registry?</h2>
-        <p>ClubSphere's directory is community-maintained. Schools are added to the registered list with a name, location, enrollment size, and their full club catalog — all stored locally in this site's dataset.</p>
+        <p>ClubSphere's directory is community-maintained. Add your school with its location, enrollment size, and full club catalog — it's added to the registry instantly and stored right in this browser.</p>
       </div>
-      <button class="register__btn" id="registerBtn">View registration format</button>
+      <button class="register__btn" id="registerBtn">Register your school</button>
     </div>
   </section>
 
@@ -171,11 +171,15 @@
   <div class="modal-overlay" id="modalOverlay">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalSchoolName">
       <button class="modal__close" id="modalClose" aria-label="Close">✕</button>
-      <div class="modal__header">
+      <div class="modal__media" id="modalMedia">
+        <span class="modal__badge" id="modalBadge" hidden>Community submission</span>
         <span class="modal__flag" id="modalFlag">🏫</span>
+      </div>
+      <div class="modal__header">
         <div>
           <h2 id="modalSchoolName">School name</h2>
           <p id="modalLocation" class="modal__location">City, Country</p>
+          <p class="modal__submitted-by" id="modalSubmittedBy" hidden></p>
         </div>
       </div>
       <div class="modal__meta" id="modalMeta"></div>
@@ -265,8 +269,93 @@
     </div>
   </div>
 
+  <!-- Register a school modal -->
+  <div class="modal-overlay" id="registerOverlay">
+    <div class="modal modal--register" role="dialog" aria-modal="true" aria-labelledby="registerFormTitle">
+      <button class="modal__close" id="registerClose" aria-label="Close">✕</button>
+
+      <div class="register-form__intro">
+        <h2 id="registerFormTitle">Register your school</h2>
+        <p>Add your school's details and club catalog. It's added to the directory immediately and saved in this browser.</p>
+      </div>
+
+      <form id="registerForm" novalidate>
+        <div class="form-grid">
+          <div class="form-field form-field--full">
+            <label for="rfName">School name</label>
+            <input type="text" id="rfName" maxlength="80" required autocomplete="off" placeholder="e.g. Riverside Academy" />
+          </div>
+          <div class="form-field">
+            <label for="rfCity">City</label>
+            <input type="text" id="rfCity" maxlength="60" required autocomplete="off" placeholder="e.g. Lisbon" />
+          </div>
+          <div class="form-field">
+            <label for="rfCountry">Country</label>
+            <input type="text" id="rfCountry" maxlength="60" required autocomplete="off" placeholder="e.g. Portugal" />
+          </div>
+          <div class="form-field">
+            <label for="rfContinent">Continent</label>
+            <select id="rfContinent" required>
+              <option value="" disabled selected>Choose a continent</option>
+              <option>Africa</option>
+              <option>Asia</option>
+              <option>Europe</option>
+              <option>North America</option>
+              <option>Oceania</option>
+              <option>South America</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="rfFlag">Flag emoji (optional)</label>
+            <input type="text" id="rfFlag" maxlength="8" autocomplete="off" placeholder="e.g. 🇵🇹" />
+          </div>
+          <div class="form-field">
+            <label for="rfStudents">Students</label>
+            <input type="number" id="rfStudents" min="0" max="200000" autocomplete="off" placeholder="e.g. 850" />
+          </div>
+          <div class="form-field">
+            <label for="rfFounded">Founded year</label>
+            <input type="number" id="rfFounded" min="1000" max="2100" autocomplete="off" placeholder="e.g. 1978" />
+          </div>
+          <div class="form-field form-field--full">
+            <label for="rfDescription">Short description</label>
+            <textarea id="rfDescription" maxlength="220" required placeholder="What is this school known for?"></textarea>
+          </div>
+        </div>
+
+        <div class="register-form__clubs-header">
+          <h3>Clubs &amp; Activities</h3>
+          <span>At least one club with a name</span>
+        </div>
+        <div id="clubRows"></div>
+        <button class="add-club-btn" id="addClubBtn" type="button">+ Add another club</button>
+
+        <p class="register-form__error" id="registerError"></p>
+        <button class="register-form__submit" id="registerSubmit" type="submit">Register school</button>
+      </form>
+    </div>
+  </div>
+
+  <datalist id="clubCategoryList">
+    <option value="STEM"></option>
+    <option value="Arts"></option>
+    <option value="Sports"></option>
+    <option value="Academic"></option>
+    <option value="Community Service"></option>
+    <option value="Business &amp; Leadership"></option>
+    <option value="Media &amp; Publishing"></option>
+    <option value="Language &amp; Culture"></option>
+  </datalist>
+
+  <!-- Toast notification -->
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <span class="toast__icon">✓</span>
+    <span id="toastMessage">School registered!</span>
+  </div>
+
   <script src="js/data.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/register.js"></script>
 </body>
 </html>

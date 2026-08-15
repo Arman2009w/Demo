@@ -7,7 +7,46 @@
 (function () {
   "use strict";
 
-  const registry = window.SCHOOL_REGISTRY || [];
+  const CUSTOM_SCHOOLS_KEY = "clubsphere_custom_schools";
+
+  function loadCustomSchools() {
+    try {
+      return JSON.parse(localStorage.getItem(CUSTOM_SCHOOLS_KEY)) || [];
+    } catch {
+      return [];
+    }
+  }
+
+  function persistCustomSchools() {
+    const custom = registry.filter((s) => s.custom);
+    localStorage.setItem(CUSTOM_SCHOOLS_KEY, JSON.stringify(custom));
+  }
+
+  const registry = [...(window.SCHOOL_REGISTRY || []), ...loadCustomSchools()];
+
+  const BANNER_PALETTES = [
+    ["#7c5cff", "#4a7bff"],
+    ["#35e0c9", "#2f8f82"],
+    ["#ff6b9d", "#7c5cff"],
+    ["#22b8c9", "#4a7bff"],
+    ["#ff9d6b", "#ff6b9d"],
+    ["#4a7bff", "#35e0c9"],
+    ["#a06bff", "#ff6b9d"],
+    ["#3593d6", "#7c5cff"]
+  ];
+
+  function hashString(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = (hash * 31 + str.charCodeAt(i)) >>> 0;
+    }
+    return hash;
+  }
+
+  function getBannerGradient(id) {
+    const [c1, c2] = BANNER_PALETTES[hashString(id) % BANNER_PALETTES.length];
+    return `linear-gradient(135deg, ${c1} 0%, ${c2} 100%)`;
+  }
 
   // ---------- DOM references ----------
   const schoolGrid = document.getElementById("schoolGrid");
@@ -28,16 +67,18 @@
 
   const modalOverlay = document.getElementById("modalOverlay");
   const modalClose = document.getElementById("modalClose");
+  const modalMedia = document.getElementById("modalMedia");
+  const modalBadge = document.getElementById("modalBadge");
   const modalFlag = document.getElementById("modalFlag");
   const modalSchoolName = document.getElementById("modalSchoolName");
   const modalLocation = document.getElementById("modalLocation");
+  const modalSubmittedBy = document.getElementById("modalSubmittedBy");
   const modalMeta = document.getElementById("modalMeta");
   const modalDescription = document.getElementById("modalDescription");
   const modalClubs = document.getElementById("modalClubs");
   const modalClubCount = document.getElementById("modalClubCount");
 
   const scrollToExploreBtn = document.getElementById("scrollToExplore");
-  const registerBtn = document.getElementById("registerBtn");
 
   const state = {
     search: "",
@@ -57,6 +98,16 @@
   }
 
   function populateFilterOptions() {
+    const previous = {
+      continent: continentFilter.value,
+      country: countryFilter.value,
+      club: clubFilter.value
+    };
+
+    resetSelectOptions(continentFilter);
+    resetSelectOptions(countryFilter);
+    resetSelectOptions(clubFilter);
+
     const continents = uniqueSorted(registry.map((s) => s.continent));
     const countries = uniqueSorted(registry.map((s) => s.country));
     const categories = uniqueSorted(
@@ -66,6 +117,14 @@
     appendOptions(continentFilter, continents);
     appendOptions(countryFilter, countries);
     appendOptions(clubFilter, categories);
+
+    if (previous.continent) continentFilter.value = previous.continent;
+    if (previous.country) countryFilter.value = previous.country;
+    if (previous.club) clubFilter.value = previous.club;
+  }
+
+  function resetSelectOptions(selectEl) {
+    while (selectEl.options.length > 1) selectEl.remove(1);
   }
 
   function appendOptions(selectEl, values) {
@@ -169,15 +228,6 @@
       document.getElementById("explore").scrollIntoView({ behavior: "smooth" });
     });
 
-    registerBtn.addEventListener("click", () => {
-      alert(
-        "To register a school, add an entry to js/data.js with:\n\n" +
-          "id, name, city, country, continent, flag, students, founded,\n" +
-          "description, and a clubs[] array of { name, category, icon, meets, description }.\n\n" +
-          "The directory picks up new entries automatically on page load."
-      );
-    });
-
     modalClose.addEventListener("click", closeModal);
     modalOverlay.addEventListener("click", (e) => {
       if (e.target === modalOverlay) closeModal();
@@ -264,14 +314,16 @@
     card.tabIndex = 0;
     card.setAttribute("role", "button");
     card.setAttribute("aria-label", `View clubs at ${school.name}`);
+    card.dataset.schoolId = school.id;
 
     const categories = uniqueSorted(school.clubs.map((c) => c.category)).slice(0, 3);
     const extraCategories = uniqueSorted(school.clubs.map((c) => c.category)).length - categories.length;
 
     card.innerHTML = `
-      <div class="school-card__top">
-        <span class="school-card__flag">${school.flag}</span>
+      <div class="school-card__media" style="background-image: ${getBannerGradient(school.id)}">
+        ${school.custom ? '<span class="school-card__badge">Community</span>' : ""}
         <span class="school-card__club-count">${school.clubs.length} clubs</span>
+        <span class="school-card__media-flag">${school.flag}</span>
       </div>
       <h3 class="school-card__name">${escapeHtml(school.name)}</h3>
       <p class="school-card__location">${escapeHtml(school.city)}, ${escapeHtml(school.country)}</p>
@@ -300,10 +352,20 @@
   // ---------- Modal ----------
   function openModal(school) {
     modalFlag.textContent = school.flag;
+    modalMedia.style.backgroundImage = getBannerGradient(school.id);
+    modalBadge.hidden = !school.custom;
     modalSchoolName.textContent = school.name;
     modalLocation.textContent = `${school.city}, ${school.country} · ${school.continent}`;
     modalDescription.textContent = school.description;
     modalClubCount.textContent = `${school.clubs.length} clubs`;
+
+    if (school.registeredBy) {
+      modalSubmittedBy.hidden = false;
+      modalSubmittedBy.innerHTML = `Submitted by <strong>@${escapeHtml(school.registeredBy)}</strong>`;
+    } else {
+      modalSubmittedBy.hidden = true;
+      modalSubmittedBy.textContent = "";
+    }
 
     modalMeta.innerHTML = `
       <div class="modal__meta-item">
@@ -352,6 +414,20 @@
     div.textContent = str;
     return div.innerHTML;
   }
+
+  // ---------- Public API for js/register.js ----------
+  window.ClubSphereRegistry = {
+    addSchool(school) {
+      registry.push(school);
+      persistCustomSchools();
+      populateFilterOptions();
+      updateStats();
+      render();
+    },
+    hasId(id) {
+      return registry.some((s) => s.id === id);
+    }
+  };
 
   document.addEventListener("DOMContentLoaded", init);
 })();

@@ -409,5 +409,10 @@
     });
   }
 
+  // ---------- Public API for js/register.js ----------
+  window.ClubSphereAuth = {
+    getCurrentUser
+  };
+
   document.addEventListener("DOMContentLoaded", init);
 })();
