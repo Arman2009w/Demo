@@ -1,5 +1,5 @@
 /* ============================================================
-   ClubSphere — Global School Clubs Directory
+   Knot — Global School Clubs Directory
    ============================================================ */
 
 :root {
@@ -111,6 +111,137 @@ select, input {
   right: -220px;
   background: radial-gradient(circle, var(--accent-2) 0%, transparent 70%);
   opacity: 0.25;
+}
+
+body.intro-active {
+  overflow: hidden;
+}
+
+/* ---------- Letter-by-letter reveal ---------- */
+@keyframes letterIn {
+  from {
+    opacity: 0;
+    transform: translateY(0.4em);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.letter {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(0.4em);
+  background-image: inherit;
+  -webkit-background-clip: inherit;
+  background-clip: inherit;
+  color: inherit;
+}
+
+.word-wrap {
+  display: inline-block;
+  white-space: nowrap;
+  background-image: inherit;
+  -webkit-background-clip: inherit;
+  background-clip: inherit;
+  color: inherit;
+}
+
+.reveal-active .letter {
+  animation: letterIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.reveal-instant .letter {
+  animation: none;
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- Intro splash ---------- */
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  background: var(--bg);
+  cursor: pointer;
+  opacity: 1;
+  transition: opacity 0.65s ease;
+}
+
+.intro[hidden] {
+  display: none;
+}
+
+.intro.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.intro__glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 700px;
+  height: 700px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+  opacity: 0.25;
+  filter: blur(100px);
+  pointer-events: none;
+}
+
+.intro__content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 24px;
+}
+
+.intro__mark {
+  font-size: 2.6rem;
+  margin-bottom: 12px;
+}
+
+.intro__wordmark {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(3rem, 10vw, 5.5rem);
+  letter-spacing: -0.02em;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  min-height: 1.2em;
+}
+
+.intro__tagline {
+  margin-top: 16px;
+  max-width: 480px;
+  font-size: clamp(0.95rem, 2.4vw, 1.1rem);
+  color: var(--text-secondary);
+  min-height: 1.6em;
+}
+
+.intro__skip {
+  position: relative;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  opacity: 0;
+  animation: fadeInSkip 0.6s ease 1.4s forwards;
+}
+
+@keyframes fadeInSkip {
+  to {
+    opacity: 1;
+  }
 }
 
 /* ---------- Navbar ---------- */
@@ -633,6 +764,14 @@ select, input {
   background: #3367d6;
 }
 
+.hero--revealed .pill,
+.hero--revealed .hero__subtitle,
+.hero--revealed .hero__search,
+.hero--revealed .hero__tags {
+  opacity: 1;
+  transform: none;
+}
+
 /* ---------- Hero ---------- */
 .hero {
   max-width: 900px;
@@ -642,6 +781,9 @@ select, input {
 }
 
 .pill {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -672,6 +814,9 @@ select, input {
 }
 
 .hero__subtitle {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.6s ease 0.12s, transform 0.6s ease 0.12s;
   font-size: 1.05rem;
   color: var(--text-secondary);
   max-width: 620px;
@@ -679,6 +824,9 @@ select, input {
 }
 
 .hero__search {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.6s ease 0.24s, transform 0.6s ease 0.24s;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -728,6 +876,9 @@ select, input {
 }
 
 .hero__tags {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.6s ease 0.36s, transform 0.6s ease 0.36s;
   margin-top: 20px;
   display: flex;
   align-items: center;

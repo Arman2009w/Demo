@@ -1,5 +1,5 @@
 /**
- * ClubSphere authentication.
+ * Knot authentication.
  *
  * Sign up / log in with Google. New accounts must pick a unique username,
  * checked against every other account in the local registry.
@@ -410,7 +410,7 @@
   }
 
   // ---------- Public API for js/register.js ----------
-  window.ClubSphereAuth = {
+  window.KnotAuth = {
     getCurrentUser
   };
 

@@ -1,9 +1,9 @@
 /**
- * ClubSphere school registration.
+ * Knot school registration.
  *
  * Lets a visitor add a school (with its clubs) straight into the directory.
  * New schools are pushed into js/app.js's in-memory registry via
- * window.ClubSphereRegistry.addSchool() and persisted to localStorage there,
+ * window.KnotRegistry.addSchool() and persisted to localStorage there,
  * so this file only owns the form UI, validation, and building the school
  * object to hand off.
  */
@@ -119,7 +119,7 @@
     const base = slugify(`${name}-${city}`) || "school";
     let candidate = base;
     let n = 1;
-    while (window.ClubSphereRegistry.hasId(candidate)) {
+    while (window.KnotRegistry.hasId(candidate)) {
       candidate = `${base}-${n}`;
       n++;
     }
@@ -151,7 +151,7 @@
     const students = Math.max(0, Number(els.students.value) || 0);
     const founded = Number(els.founded.value) || currentYear;
     const flag = els.flag.value.trim() || "🏫";
-    const user = window.ClubSphereAuth?.getCurrentUser?.();
+    const user = window.KnotAuth?.getCurrentUser?.();
 
     const school = {
       id: generateId(name, city),
@@ -168,7 +168,7 @@
       registeredBy: user ? user.username : null
     };
 
-    window.ClubSphereRegistry.addSchool(school);
+    window.KnotRegistry.addSchool(school);
     closeRegisterModal();
     showToast(`${name} was added to the registry!`);
     highlightNewCard(school.id);

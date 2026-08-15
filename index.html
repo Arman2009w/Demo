@@ -3,14 +3,25 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>ClubSphere — Global School Clubs Directory</title>
-<meta name="description" content="Browse a registered directory of schools from around the world and explore the clubs they offer." />
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌐</text></svg>" />
+<title>Knot — Tying School Communities Together</title>
+<meta name="description" content="Knot ties together a registered directory of schools from around the world so you can explore the clubs they offer." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪢</text></svg>" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
+
+  <!-- Intro splash -->
+  <div class="intro" id="introScreen" aria-hidden="true" role="presentation">
+    <div class="intro__glow" aria-hidden="true"></div>
+    <div class="intro__content">
+      <span class="intro__mark">🪢</span>
+      <h1 class="intro__wordmark" id="introWordmark">Knot</h1>
+      <p class="intro__tagline" id="introTagline">A platform that ties different school communities together like a knot.</p>
+    </div>
+    <span class="intro__skip">Click anywhere to skip</span>
+  </div>
 
   <!-- Animated background -->
   <div class="bg-grid" aria-hidden="true"></div>
@@ -21,8 +32,8 @@
   <header class="navbar">
     <div class="navbar__inner">
       <a href="#top" class="brand">
-        <span class="brand__mark">◆</span>
-        <span class="brand__text">Club<span class="accent">Sphere</span></span>
+        <span class="brand__mark">🪢</span>
+        <span class="brand__text accent">Knot</span>
       </a>
       <nav class="navbar__links">
         <a href="#explore">Explore</a>
@@ -40,17 +51,14 @@
 
   <!-- Hero -->
   <section class="hero" id="top">
-    <div class="hero__inner">
-      <span class="pill">
+    <div class="hero__inner" id="heroInner">
+      <span class="pill" id="heroPill">
         <span class="pill__dot"></span>
         Live registry &middot; <span id="heroSchoolCount">0</span> schools &middot; <span id="heroClubCount">0</span> clubs
       </span>
-      <h1 class="hero__title">
-        Discover school clubs<br />
-        from <span class="accent">every corner</span> of the globe.
-      </h1>
-      <p class="hero__subtitle">
-        ClubSphere connects a registered directory of schools across countries and continents,
+      <h1 class="hero__title" id="heroTitle" aria-label="Discover school clubs from every corner of the globe.">Discover school clubs<br />from <span class="accent">every corner</span> of the globe.</h1>
+      <p class="hero__subtitle" id="heroSubtitle">
+        Knot ties together a registered directory of schools across countries and continents,
         so students and educators can browse what's happening beyond the classroom — from robotics
         labs in Tokyo to debate societies in Nairobi.
       </p>
@@ -61,7 +69,7 @@
         <button class="hero__search-clear" id="clearSearch" title="Clear search" aria-label="Clear search">✕</button>
       </div>
 
-      <div class="hero__tags">
+      <div class="hero__tags" id="heroTags">
         <span>Try:</span>
         <button class="tag-btn" data-query="Japan">Japan</button>
         <button class="tag-btn" data-query="Robotics">Robotics</button>
@@ -154,7 +162,7 @@
     <div class="register__card">
       <div class="register__text">
         <h2>Is your school part of the registry?</h2>
-        <p>ClubSphere's directory is community-maintained. Add your school with its location, enrollment size, and full club catalog — it's added to the registry instantly and stored right in this browser.</p>
+        <p>Knot's directory is community-maintained. Add your school with its location, enrollment size, and full club catalog — it's added to the registry instantly and stored right in this browser.</p>
       </div>
       <button class="register__btn" id="registerBtn">Register your school</button>
     </div>
@@ -162,7 +170,7 @@
 
   <footer class="footer">
     <div class="footer__inner">
-      <span>◆ ClubSphere — a static, front-end-only global clubs directory.</span>
+      <span>🪢 Knot — a static, front-end-only global clubs directory.</span>
       <span>Built with HTML, CSS &amp; JavaScript.</span>
     </div>
   </footer>
@@ -200,7 +208,7 @@
       <!-- Step 1: continue with Google -->
       <div class="auth-step" id="authStepGoogle">
         <span class="auth-step__mark">◆</span>
-        <h2 id="authTitle">Sign in to ClubSphere</h2>
+        <h2 id="authTitle">Sign in to Knot</h2>
         <p class="auth-step__sub">Sign up or log in with Google — new accounts just need a unique username.</p>
 
         <div id="googleBtnContainer" class="google-btn-container"></div>
@@ -252,7 +260,7 @@
         </svg>
         <span>Choose an account</span>
       </div>
-      <p class="google-picker__sub">to continue to ClubSphere (demo)</p>
+      <p class="google-picker__sub">to continue to Knot (demo)</p>
 
       <div class="google-picker__list" id="googlePickerList"></div>
 
@@ -358,5 +366,6 @@
   <script src="js/app.js"></script>
   <script src="js/register.js"></script>
   <script src="js/membership.js"></script>
+  <script src="js/intro.js"></script>
 </body>
 </html>

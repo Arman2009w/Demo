@@ -1,5 +1,5 @@
 /**
- * ClubSphere front-end logic.
+ * Knot front-end logic.
  * Reads the registered school list from data.js (window.SCHOOL_REGISTRY),
  * renders filterable/searchable cards, and powers the club detail modal.
  */
@@ -385,8 +385,8 @@
     modalClubs.innerHTML = school.clubs
       .map((club) => {
         const joinBlock = club.openMembership
-          ? window.ClubSphereMembership.renderJoinBlock(
-              window.ClubSphereMembership.getClubKey(school.id, club.name),
+          ? window.KnotMembership.renderJoinBlock(
+              window.KnotMembership.getClubKey(school.id, club.name),
               club.name,
               club.joinNote || "Open to students everywhere."
             )
@@ -426,7 +426,7 @@
   }
 
   // ---------- Public API for js/register.js ----------
-  window.ClubSphereRegistry = {
+  window.KnotRegistry = {
     addSchool(school) {
       registry.push(school);
       persistCustomSchools();

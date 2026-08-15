@@ -1,5 +1,5 @@
 /**
- * ClubSphere club membership.
+ * Knot club membership.
  *
  * Most clubs in the registry only make sense for enrolled students, but a
  * handful are flagged `openMembership: true` in js/data.js — these are
@@ -7,7 +7,7 @@
  * conferences, etc.) that any visitor can join. This file renders the
  * "Join this club" UI for those clubs only, and stores membership locally.
  *
- * js/app.js calls window.ClubSphereMembership.getClubKey() and
+ * js/app.js calls window.KnotMembership.getClubKey() and
  * .renderJoinBlock() while building each club card's HTML; this file then
  * handles all the click/submit interaction via event delegation on the
  * #modalClubs container (which stays in the DOM across modal re-renders).
@@ -57,7 +57,7 @@
   // Inner markup only (no wrapping .club-join div) — reused by the full
   // block below and to restore a card after cancelling the inline form.
   function renderPrompt(clubKey, clubName, joinNote) {
-    const user = window.ClubSphereAuth?.getCurrentUser?.();
+    const user = window.KnotAuth?.getCurrentUser?.();
     const joinBtn = user
       ? `<button class="club-join__btn" type="button" data-club-key="${clubKey}" data-club-name="${escapeHtml(clubName)}" data-quick="1">Join as @${escapeHtml(user.username)}</button>`
       : `<button class="club-join__btn" type="button" data-club-key="${clubKey}" data-club-name="${escapeHtml(clubName)}">Join this club</button>`;
@@ -122,7 +122,7 @@
       const clubName = joinBtn.dataset.clubName;
 
       if (joinBtn.dataset.quick === "1") {
-        const user = window.ClubSphereAuth?.getCurrentUser?.();
+        const user = window.KnotAuth?.getCurrentUser?.();
         saveMembership(clubKey, user?.name || user?.username || "", user?.email || "");
         renderDone(container, user?.name || user?.username);
         return;
@@ -164,7 +164,7 @@
     modalClubs.addEventListener("submit", handleSubmit);
   }
 
-  window.ClubSphereMembership = {
+  window.KnotMembership = {
     getClubKey,
     renderJoinBlock
   };

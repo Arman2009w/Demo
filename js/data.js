@@ -1,5 +1,5 @@
 /**
- * ClubSphere — Registered School Directory
+ * Knot — Registered School Directory
  * This is the "registered list" of schools stored locally in the front end.
  * Each school entry includes its location metadata and full club catalog.
  */
