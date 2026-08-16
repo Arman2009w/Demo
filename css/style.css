@@ -26,8 +26,37 @@
   --shadow-soft: 0 10px 40px rgba(0, 0, 0, 0.35);
   --shadow-glow: 0 0 0 1px rgba(124, 92, 255, 0.15), 0 20px 60px rgba(124, 92, 255, 0.15);
 
+  --grid-line: rgba(255, 255, 255, 0.09);
+  --navbar-bg: rgba(6, 7, 13, 0.72);
+
   --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
   --font-body: "Inter", system-ui, sans-serif;
+}
+
+/* Light theme — activated by [data-theme="light"] on <html>, set as early
+   as possible (an inline script in <head>) to avoid a flash of dark theme. */
+:root[data-theme="light"] {
+  --bg: #f5f6fb;
+  --bg-elevated: #ffffff;
+  --surface: rgba(20, 21, 40, 0.035);
+  --surface-hover: rgba(20, 21, 40, 0.065);
+  --border: rgba(20, 21, 40, 0.1);
+  --border-strong: rgba(20, 21, 40, 0.18);
+
+  --text-primary: #14151f;
+  --text-secondary: #4c5169;
+  --text-muted: #767c94;
+
+  --accent: #6a4cf0;
+  --accent-2: #0d9488;
+  --accent-3: #db2f77;
+  --gradient: linear-gradient(135deg, var(--accent) 0%, #3f63e0 55%, var(--accent-2) 100%);
+
+  --shadow-soft: 0 10px 40px rgba(20, 21, 45, 0.1);
+  --shadow-glow: 0 0 0 1px rgba(106, 76, 240, 0.15), 0 20px 60px rgba(106, 76, 240, 0.12);
+
+  --grid-line: rgba(20, 21, 40, 0.06);
+  --navbar-bg: rgba(245, 246, 251, 0.72);
 }
 
 * {
@@ -47,6 +76,7 @@ body {
   line-height: 1.5;
   overflow-x: hidden;
   min-height: 100vh;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 body.no-scroll {
@@ -83,8 +113,8 @@ select, input {
   inset: 0;
   z-index: -2;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.09) 1px, transparent 1px);
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
   background-size: 56px 56px;
   mask-image: radial-gradient(ellipse 140% 100% at 50% 0%, #000 55%, transparent 100%);
 }
@@ -256,7 +286,7 @@ body.intro-active {
   top: 0;
   z-index: 50;
   backdrop-filter: blur(16px) saturate(160%);
-  background: rgba(6, 7, 13, 0.72);
+  background: var(--navbar-bg);
   border-bottom: 1px solid var(--border);
 }
 
@@ -330,6 +360,43 @@ body.intro-active {
   gap: 12px;
 }
 
+/* ---------- Theme toggle ---------- */
+.theme-toggle {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text-secondary);
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+  color: var(--text-primary);
+  background: var(--surface-hover);
+}
+
+.theme-toggle__icon--sun {
+  display: none;
+}
+
+.theme-toggle__icon--moon {
+  display: block;
+}
+
+:root[data-theme="light"] .theme-toggle__icon--sun {
+  display: block;
+}
+
+:root[data-theme="light"] .theme-toggle__icon--moon {
+  display: none;
+}
+
 /* ---------- Auth: sign-in button & user chip ---------- */
 .auth-signin-btn {
   padding: 9px 18px;
@@ -377,6 +444,14 @@ body.intro-active {
   font-size: 0.7rem;
   font-weight: 700;
   flex-shrink: 0;
+  overflow: hidden;
+}
+
+.user-chip__avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .user-chip__name {
@@ -1269,7 +1344,7 @@ body.intro-active {
 }
 
 .tag--muted {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--surface);
   color: var(--text-muted);
   border-color: var(--border);
 }
@@ -2135,6 +2210,11 @@ body.intro-active {
   margin-bottom: 24px;
 }
 
+.profile-avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
 .profile-card__avatar {
   width: 64px;
   height: 64px;
@@ -2147,6 +2227,49 @@ body.intro-active {
   color: #0a0a12;
   font-weight: 700;
   font-size: 1.3rem;
+  overflow: hidden;
+}
+
+.profile-card__avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.profile-avatar-edit {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+}
+
+.profile-avatar-edit:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--surface-hover);
+}
+
+.profile-avatar-remove {
+  margin-top: 4px;
+  font-size: 0.76rem;
+  color: var(--accent-3);
+  padding: 2px 4px;
+  border-radius: var(--radius-sm);
+  transition: background 0.2s ease;
+}
+
+.profile-avatar-remove:hover {
+  background: rgba(255, 107, 157, 0.1);
 }
 
 .profile-card h2 {

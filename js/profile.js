@@ -104,6 +104,9 @@
       guardSignInBtn: document.getElementById("guardSignInBtn"),
 
       avatar: document.getElementById("profileAvatar"),
+      avatarEditBtn: document.getElementById("avatarEditBtn"),
+      avatarInput: document.getElementById("avatarInput"),
+      avatarRemoveBtn: document.getElementById("avatarRemoveBtn"),
       name: document.getElementById("profileName"),
       username: document.getElementById("profileUsername"),
       email: document.getElementById("profileEmail"),
@@ -154,7 +157,7 @@
     els.guard.hidden = true;
     els.content.hidden = false;
 
-    els.avatar.textContent = initials(user.name || user.username);
+    renderAvatar(user);
     els.name.textContent = user.name || `@${user.username}`;
     els.username.textContent = `@${user.username}`;
     els.email.textContent = user.email;
@@ -232,6 +235,44 @@
       `
       )
       .join("");
+  }
+
+  // ---------- profile picture ----------
+  function renderAvatar(user) {
+    if (user.picture) {
+      els.avatar.innerHTML = `<img class="profile-card__avatar-img" src="${user.picture}" alt="" />`;
+      els.avatarRemoveBtn.hidden = false;
+    } else {
+      els.avatar.textContent = initials(user.name || user.username);
+      els.avatarRemoveBtn.hidden = true;
+    }
+  }
+
+  function handleAvatarFile(file) {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      showToast("Please choose an image file.");
+      return;
+    }
+    if (file.size > MAX_SOURCE_FILE_BYTES) {
+      showToast("That image is too large — please choose a file under 20MB.");
+      return;
+    }
+
+    window.KnotImageUtils.compressImage(file, 400, 0.85)
+      .then((dataUrl) => {
+        window.KnotAuth.updateCurrentUser({ picture: dataUrl });
+        showToast("Profile picture updated.");
+        render();
+      })
+      .catch(() => {
+        showToast("Couldn't read that image — try a different file.");
+      });
+  }
+
+  function removeAvatar() {
+    window.KnotAuth.updateCurrentUser({ picture: "" });
+    render();
   }
 
   // ---------- edit / delete school ----------
@@ -402,6 +443,10 @@
     els.guardSignInBtn.addEventListener("click", () => {
       document.getElementById("signInBtn")?.click();
     });
+
+    els.avatarEditBtn.addEventListener("click", () => els.avatarInput.click());
+    els.avatarInput.addEventListener("change", () => handleAvatarFile(els.avatarInput.files[0]));
+    els.avatarRemoveBtn.addEventListener("click", removeAvatar);
 
     els.schoolsList.addEventListener("click", (e) => {
       const btn = e.target.closest("[data-action]");

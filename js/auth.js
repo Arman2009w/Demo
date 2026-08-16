@@ -64,6 +64,17 @@
     return getUsers()[email] || null;
   }
 
+  function updateCurrentUser(updates) {
+    const email = getSessionEmail();
+    if (!email) return null;
+    const users = getUsers();
+    if (!users[email]) return null;
+    users[email] = { ...users[email], ...updates };
+    saveUsers(users);
+    renderAuthArea();
+    return users[email];
+  }
+
   function isUsernameTaken(username, exceptEmail) {
     const lower = username.toLowerCase();
     return Object.entries(getUsers()).some(
@@ -326,9 +337,13 @@
       return;
     }
 
+    const avatarContent = user.picture
+      ? `<img class="user-chip__avatar-img" src="${user.picture}" alt="" />`
+      : initials(user.name || user.username);
+
     els.authArea.innerHTML = `
       <div class="user-chip" id="userChip">
-        <span class="user-chip__avatar">${initials(user.name || user.username)}</span>
+        <span class="user-chip__avatar">${avatarContent}</span>
         <span class="user-chip__name">@${escapeHtml(user.username)}</span>
         <span class="user-chip__caret">▾</span>
         <div class="user-menu" id="userMenu">
@@ -415,7 +430,8 @@
 
   // ---------- Public API for js/register.js ----------
   window.KnotAuth = {
-    getCurrentUser
+    getCurrentUser,
+    updateCurrentUser
   };
 
   document.addEventListener("DOMContentLoaded", init);
