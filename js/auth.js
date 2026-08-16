@@ -322,6 +322,7 @@
     if (!user) {
       els.authArea.innerHTML = `<button class="auth-signin-btn" id="signInBtn" type="button">Sign In</button>`;
       document.getElementById("signInBtn").addEventListener("click", openAuthModal);
+      document.dispatchEvent(new CustomEvent("knot:authchange"));
       return;
     }
 
@@ -335,6 +336,7 @@
             <span class="user-menu__name">${escapeHtml(user.name || "")}</span>
             <span class="user-menu__email">${escapeHtml(user.email)}</span>
           </div>
+          <a class="user-menu__link" href="profile.html">My Profile</a>
           <button class="user-menu__logout" id="logoutBtn" type="button">Log out</button>
         </div>
       </div>
@@ -350,6 +352,8 @@
       setSessionEmail(null);
       renderAuthArea();
     });
+
+    document.dispatchEvent(new CustomEvent("knot:authchange"));
   }
 
   function escapeHtml(str) {

@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Knot — Tying School Communities Together</title>
-<meta name="description" content="Knot ties together a registered directory of schools from around the world so you can explore the clubs they offer." />
+<title>Your Profile — Knot</title>
+<meta name="description" content="Manage the schools you've registered and the clubs you've joined on Knot." />
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2238%22 cy=%2250%22 r=%2226%22 fill=%22none%22 stroke=%22%237c5cff%22 stroke-width=%2211%22/><circle cx=%2264%22 cy=%2250%22 r=%2226%22 fill=%22none%22 stroke=%22%2335e0c9%22 stroke-width=%2211%22/></svg>" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -23,7 +23,7 @@
         </svg>
       </span>
       <h1 class="intro__wordmark" id="introWordmark">Knot</h1>
-      <p class="intro__tagline" id="introTagline">A platform that ties different school communities together like a knot.</p>
+      <p class="intro__tagline" id="introTagline">Your schools. Your clubs. All in one place.</p>
     </div>
     <span class="intro__skip">Click anywhere to skip</span>
   </div>
@@ -36,7 +36,7 @@
   <!-- Navbar -->
   <header class="navbar">
     <div class="navbar__inner">
-      <a href="#top" class="brand">
+      <a href="index.html" class="brand">
         <span class="brand__mark">
           <svg class="knot-icon" viewBox="0 0 32 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <circle cx="12" cy="10" r="7.5" stroke="currentColor" stroke-width="3"/>
@@ -46,12 +46,12 @@
         <span class="brand__text accent">Knot</span>
       </a>
       <nav class="navbar__links">
-        <a href="#explore">Explore</a>
-        <a href="#stats">Network</a>
-        <a href="#register" id="registerNavLink">Register a School</a>
+        <a href="index.html#explore">Explore</a>
+        <a href="index.html#stats">Network</a>
+        <a href="index.html#register">Register a School</a>
       </nav>
       <div class="navbar__right">
-        <button class="navbar__cta" id="scrollToExplore">Launch Directory</button>
+        <a class="navbar__cta" href="index.html#explore" style="text-decoration:none; display:inline-flex; align-items:center;">Launch Directory</a>
         <div class="auth-area" id="authArea">
           <button class="auth-signin-btn" id="signInBtn">Sign In</button>
         </div>
@@ -59,123 +59,71 @@
     </div>
   </header>
 
-  <!-- Hero -->
-  <section class="hero" id="top">
+  <!-- Profile hero -->
+  <section class="hero profile-hero" id="top">
     <div class="hero__inner" id="heroInner">
       <span class="pill" id="heroPill">
         <span class="pill__dot"></span>
-        Live registry &middot; <span id="heroSchoolCount">0</span> schools &middot; <span id="heroClubCount">0</span> clubs
+        Your Knot account
       </span>
-      <h1 class="hero__title" id="heroTitle" aria-label="Discover school clubs from every corner of the globe.">Discover school clubs<br />from <span class="accent">every corner</span> of the globe.</h1>
+      <h1 class="hero__title" id="heroTitle" aria-label="Your schools. Your clubs.">
+        Your schools.<br />Your <span class="accent">clubs</span>.
+      </h1>
       <p class="hero__subtitle" id="heroSubtitle">
-        Knot ties together a registered directory of schools across countries and continents,
-        so students and educators can browse what's happening beyond the classroom — from robotics
-        labs in Tokyo to debate societies in Nairobi.
+        Everything you've registered and joined on Knot, all in one place — edit a school
+        or step away from a club any time.
       </p>
-
-      <div class="hero__search" id="heroSearchBar">
-        <svg class="hero__search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" id="searchInput" placeholder="Search by school, city, or country…" autocomplete="off" />
-        <button class="hero__search-clear" id="clearSearch" title="Clear search" aria-label="Clear search">✕</button>
-      </div>
-
-      <div class="hero__tags" id="heroTags">
-        <span>Try:</span>
-        <button class="tag-btn" data-query="Japan">Japan</button>
-        <button class="tag-btn" data-query="Robotics">Robotics</button>
-        <button class="tag-btn" data-query="Kenya">Kenya</button>
-        <button class="tag-btn" data-query="Debate">Debate</button>
-        <button class="tag-btn" data-query="Brazil">Brazil</button>
-      </div>
     </div>
   </section>
 
-  <!-- Stats -->
-  <section class="stats" id="stats">
-    <div class="stats__inner">
-      <div class="stat-card">
-        <span class="stat-card__value" id="statSchools">0</span>
-        <span class="stat-card__label">Registered Schools</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-card__value" id="statCountries">0</span>
-        <span class="stat-card__label">Countries</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-card__value" id="statClubs">0</span>
-        <span class="stat-card__label">Active Clubs</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-card__value" id="statCategories">0</span>
-        <span class="stat-card__label">Club Categories</span>
-      </div>
+  <!-- Signed-out state -->
+  <section class="profile-guard" id="profileGuard" hidden>
+    <div class="profile-guard__card">
+      <span class="profile-guard__icon">🔒</span>
+      <h2>Sign in to see your profile</h2>
+      <p>Your registered schools and joined clubs are tied to your Knot account.</p>
+      <button class="register__btn" id="guardSignInBtn" type="button">Sign In</button>
     </div>
   </section>
 
-  <!-- Explore -->
-  <section class="explore" id="explore">
-    <div class="explore__header">
+  <!-- Signed-in content -->
+  <section class="profile-content" id="profileContent" hidden>
+
+    <div class="profile-card">
+      <span class="profile-card__avatar" id="profileAvatar"></span>
       <div>
-        <h2>Explore the registry</h2>
-        <p>Filter the global school list, then open a school to see its full club lineup.</p>
-      </div>
-      <div class="view-toggle" role="group" aria-label="View mode">
-        <button class="view-toggle__btn is-active" data-view="grid" aria-label="Grid view">▦</button>
-        <button class="view-toggle__btn" data-view="list" aria-label="List view">☰</button>
+        <h2 id="profileName"></h2>
+        <p id="profileUsername" class="profile-card__username"></p>
+        <p id="profileEmail" class="profile-card__email"></p>
       </div>
     </div>
 
-    <div class="filters">
-      <div class="filter-group">
-        <label for="continentFilter">Continent</label>
-        <select id="continentFilter">
-          <option value="all">All continents</option>
-        </select>
+    <div class="profile-stats">
+      <div class="stat-card">
+        <span class="stat-card__value" id="statMySchools">0</span>
+        <span class="stat-card__label">Schools Registered</span>
       </div>
-      <div class="filter-group">
-        <label for="countryFilter">Country</label>
-        <select id="countryFilter">
-          <option value="all">All countries</option>
-        </select>
+      <div class="stat-card">
+        <span class="stat-card__value" id="statMyClubs">0</span>
+        <span class="stat-card__label">Clubs Joined</span>
       </div>
-      <div class="filter-group">
-        <label for="clubFilter">Club category</label>
-        <select id="clubFilter">
-          <option value="all">All categories</option>
-        </select>
-      </div>
-      <div class="filter-group filter-group--sort">
-        <label for="sortSelect">Sort by</label>
-        <select id="sortSelect">
-          <option value="name-asc">Name (A–Z)</option>
-          <option value="name-desc">Name (Z–A)</option>
-          <option value="clubs-desc">Most clubs</option>
-          <option value="students-desc">Largest enrollment</option>
-        </select>
-      </div>
-      <button class="filter-reset" id="resetFilters">Reset</button>
     </div>
 
-    <p class="results-count" id="resultsCount"></p>
-
-    <div class="school-grid" id="schoolGrid"></div>
-    <div class="empty-state" id="emptyState" hidden>
-      <span class="empty-state__icon">🔎</span>
-      <h3>No schools match your filters</h3>
-      <p>Try clearing a filter or searching a different term.</p>
-      <button class="filter-reset" id="emptyReset">Clear all filters</button>
-    </div>
-  </section>
-
-  <!-- Register CTA -->
-  <section class="register" id="register">
-    <div class="register__card">
-      <div class="register__text">
-        <h2>Is your school part of the registry?</h2>
-        <p>Knot's directory is community-maintained. Add your school with its location, enrollment size, and full club catalog — it's added to the registry instantly and stored right in this browser.</p>
+    <div class="profile-section">
+      <div class="profile-section__header">
+        <h3>Schools you've registered</h3>
+        <a class="register__btn" href="index.html#register">+ Register a school</a>
       </div>
-      <button class="register__btn" id="registerBtn">Register your school</button>
+      <div class="profile-schools" id="myschoolsList"></div>
+      <p class="profile-empty" id="myschoolsEmpty" hidden>You haven't registered any schools yet.</p>
     </div>
+
+    <div class="profile-section">
+      <h3>Clubs you're part of</h3>
+      <div class="profile-clubs" id="myclubsList"></div>
+      <p class="profile-empty" id="myclubsEmpty" hidden>You haven't joined any clubs yet — look for the 🌍 open-worldwide badge on a club's page to join.</p>
+    </div>
+
   </section>
 
   <footer class="footer">
@@ -190,30 +138,6 @@
       <span>Built with HTML, CSS &amp; JavaScript.</span>
     </div>
   </footer>
-
-  <!-- School detail modal -->
-  <div class="modal-overlay" id="modalOverlay">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalSchoolName">
-      <button class="modal__close" id="modalClose" aria-label="Close">✕</button>
-      <div class="modal__media" id="modalMedia">
-        <span class="modal__badge" id="modalBadge" hidden>Community submission</span>
-      </div>
-      <div class="modal__header">
-        <div>
-          <h2 id="modalSchoolName">School name</h2>
-          <p id="modalLocation" class="modal__location">City, Country</p>
-          <p class="modal__submitted-by" id="modalSubmittedBy" hidden></p>
-        </div>
-      </div>
-      <div class="modal__meta" id="modalMeta"></div>
-      <p class="modal__description" id="modalDescription"></p>
-      <div class="modal__clubs-header">
-        <h3>Clubs &amp; Activities</h3>
-        <span id="modalClubCount" class="modal__club-count"></span>
-      </div>
-      <div class="modal__clubs" id="modalClubs"></div>
-    </div>
-  </div>
 
   <!-- Sign up / Log in modal -->
   <div class="modal-overlay" id="authOverlay">
@@ -292,46 +216,46 @@
     </div>
   </div>
 
-  <!-- Register a school modal -->
-  <div class="modal-overlay" id="registerOverlay">
-    <div class="modal modal--register" role="dialog" aria-modal="true" aria-labelledby="registerFormTitle">
-      <button class="modal__close" id="registerClose" aria-label="Close">✕</button>
+  <!-- Edit school modal -->
+  <div class="modal-overlay" id="editOverlay">
+    <div class="modal modal--register" role="dialog" aria-modal="true" aria-labelledby="editFormTitle">
+      <button class="modal__close" id="editClose" aria-label="Close">✕</button>
 
       <div class="register-form__intro">
-        <h2 id="registerFormTitle">Register your school</h2>
-        <p>Add your school's details and club catalog. It's added to the directory immediately and saved in this browser.</p>
+        <h2 id="editFormTitle">Edit school</h2>
+        <p>Update your school's details and club catalog.</p>
       </div>
 
-      <form id="registerForm" novalidate>
+      <form id="editForm" novalidate>
         <div class="form-grid">
           <div class="form-field form-field--full">
-            <label for="rfName">School name</label>
-            <input type="text" id="rfName" maxlength="80" required autocomplete="off" placeholder="e.g. Riverside Academy" />
+            <label for="efName">School name</label>
+            <input type="text" id="efName" maxlength="80" required autocomplete="off" />
           </div>
           <div class="form-field form-field--full">
-            <label for="rfPhoto">School photo (optional)</label>
-            <div class="photo-upload" id="photoUpload" tabindex="0" role="button" aria-label="Upload a school photo">
-              <input type="file" id="rfPhoto" accept="image/*" hidden />
-              <div class="photo-upload__preview" id="photoPreview">
+            <label for="efPhoto">School photo (optional)</label>
+            <div class="photo-upload" id="editPhotoUpload" tabindex="0" role="button" aria-label="Upload a school photo">
+              <input type="file" id="efPhoto" accept="image/*" hidden />
+              <div class="photo-upload__preview" id="editPhotoPreview">
                 <svg class="photo-upload__icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.7"/><path d="M21 15l-5-5-9 9"/></svg>
                 <span class="photo-upload__text">Click to upload a photo</span>
                 <span class="photo-upload__hint">JPG or PNG — resized automatically</span>
               </div>
             </div>
-            <button type="button" class="photo-upload__remove" id="photoRemove" hidden>Remove photo</button>
+            <button type="button" class="photo-upload__remove" id="editPhotoRemove" hidden>Remove photo</button>
           </div>
           <div class="form-field">
-            <label for="rfCity">City</label>
-            <input type="text" id="rfCity" maxlength="60" required autocomplete="off" placeholder="e.g. Lisbon" />
+            <label for="efCity">City</label>
+            <input type="text" id="efCity" maxlength="60" required autocomplete="off" />
           </div>
           <div class="form-field">
-            <label for="rfCountry">Country</label>
-            <input type="text" id="rfCountry" maxlength="60" required autocomplete="off" placeholder="e.g. Portugal" />
+            <label for="efCountry">Country</label>
+            <input type="text" id="efCountry" maxlength="60" required autocomplete="off" />
           </div>
           <div class="form-field">
-            <label for="rfContinent">Continent</label>
-            <select id="rfContinent" required>
-              <option value="" disabled selected>Choose a continent</option>
+            <label for="efContinent">Continent</label>
+            <select id="efContinent" required>
+              <option value="" disabled>Choose a continent</option>
               <option>Africa</option>
               <option>Asia</option>
               <option>Europe</option>
@@ -341,20 +265,20 @@
             </select>
           </div>
           <div class="form-field">
-            <label for="rfFlag">Flag emoji (optional)</label>
-            <input type="text" id="rfFlag" maxlength="8" autocomplete="off" placeholder="e.g. 🇵🇹" />
+            <label for="efFlag">Flag emoji (optional)</label>
+            <input type="text" id="efFlag" maxlength="8" autocomplete="off" placeholder="e.g. 🇵🇹" />
           </div>
           <div class="form-field">
-            <label for="rfStudents">Students</label>
-            <input type="number" id="rfStudents" min="0" max="200000" autocomplete="off" placeholder="e.g. 850" />
+            <label for="efStudents">Students</label>
+            <input type="number" id="efStudents" min="0" max="200000" autocomplete="off" />
           </div>
           <div class="form-field">
-            <label for="rfFounded">Founded year</label>
-            <input type="number" id="rfFounded" min="1000" max="2100" autocomplete="off" placeholder="e.g. 1978" />
+            <label for="efFounded">Founded year</label>
+            <input type="number" id="efFounded" min="1000" max="2100" autocomplete="off" />
           </div>
           <div class="form-field form-field--full">
-            <label for="rfDescription">Short description</label>
-            <textarea id="rfDescription" maxlength="220" required placeholder="What is this school known for?"></textarea>
+            <label for="efDescription">Short description</label>
+            <textarea id="efDescription" maxlength="220" required></textarea>
           </div>
         </div>
 
@@ -362,11 +286,11 @@
           <h3>Clubs &amp; Activities</h3>
           <span>At least one club with a name</span>
         </div>
-        <div id="clubRows"></div>
-        <button class="add-club-btn" id="addClubBtn" type="button">+ Add another club</button>
+        <div id="editClubRows"></div>
+        <button class="add-club-btn" id="editAddClubBtn" type="button">+ Add another club</button>
 
-        <p class="register-form__error" id="registerError"></p>
-        <button class="register-form__submit" id="registerSubmit" type="submit">Register school</button>
+        <p class="register-form__error" id="editError"></p>
+        <button class="register-form__submit" id="editSubmit" type="submit">Save changes</button>
       </form>
     </div>
   </div>
@@ -385,15 +309,15 @@
   <!-- Toast notification -->
   <div class="toast" id="toast" role="status" aria-live="polite">
     <span class="toast__icon">✓</span>
-    <span id="toastMessage">School registered!</span>
+    <span id="toastMessage"></span>
   </div>
 
   <script src="js/data.js"></script>
   <script src="js/auth.js"></script>
-  <script src="js/app.js"></script>
-  <script src="js/image-utils.js"></script>
-  <script src="js/register.js"></script>
   <script src="js/membership.js"></script>
+  <script src="js/image-utils.js"></script>
+  <script src="js/club-row-editor.js"></script>
+  <script src="js/profile.js"></script>
   <script src="js/intro.js"></script>
 </body>
 </html>
