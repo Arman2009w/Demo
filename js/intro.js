@@ -21,6 +21,20 @@
 
   const TITLE_STEP_MS = 22;
 
+  const SEEN_KEY = "knot_intro_seen";
+  function introAlreadySeen() {
+    try {
+      return sessionStorage.getItem(SEEN_KEY) === "1";
+    } catch (e) {
+      return false;
+    }
+  }
+  function markIntroSeen() {
+    try {
+      sessionStorage.setItem(SEEN_KEY, "1");
+    } catch (e) {}
+  }
+
   // ---------- letter-splitting ----------
   // Recursively wraps every character of an element's text in
   // <span class="letter"> with a staggered animation-delay, while leaving
@@ -83,14 +97,16 @@
       return;
     }
 
-    if (REDUCE_MOTION) {
+    if (REDUCE_MOTION || introAlreadySeen()) {
       intro.classList.add("is-hidden");
       intro.setAttribute("hidden", "");
       document.body.classList.remove("intro-active");
+      markIntroSeen();
       startHeroReveal(true);
       return;
     }
 
+    markIntroSeen();
     document.body.classList.add("intro-active");
 
     const wordmarkLetters = splitLetters(wordmark, WORDMARK_STEP_MS);

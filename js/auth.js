@@ -341,6 +341,11 @@
       ? `<img class="user-chip__avatar-img" src="${user.picture}" alt="" />`
       : initials(user.name || user.username);
 
+    const onProfilePage = /(^|\/)profile\.html$/.test(window.location.pathname);
+    const profileLink = onProfilePage
+      ? ""
+      : `<a class="user-menu__link" href="profile.html">My Profile</a>`;
+
     els.authArea.innerHTML = `
       <div class="user-chip" id="userChip">
         <span class="user-chip__avatar">${avatarContent}</span>
@@ -351,7 +356,7 @@
             <span class="user-menu__name">${escapeHtml(user.name || "")}</span>
             <span class="user-menu__email">${escapeHtml(user.email)}</span>
           </div>
-          <a class="user-menu__link" href="profile.html">My Profile</a>
+          ${profileLink}
           <button class="user-menu__logout" id="logoutBtn" type="button">Log out</button>
         </div>
       </div>
