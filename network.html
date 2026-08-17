@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Your Profile — Knot</title>
-<meta name="description" content="Manage the schools you've registered and the clubs you've joined on Knot." />
+<title>Your Network — Knot</title>
+<meta name="description" content="Find other Knot users by username, add them as friends, and see the schools and clubs they're part of." />
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><defs><clipPath id=%22c%22><path d=%22M50,32 L27,9 Q20,6 18,13 L12,44 Q10,62 19,73 Q32,92 50,94 Q68,92 81,73 Q90,62 88,44 L82,13 Q80,6 73,9 Z%22/></clipPath></defs><g clip-path=%22url(%23c)%22><rect width=%22100%22 height=%22100%22 fill=%22%23FF7733%22/><path d=%22M50,-5 C36,20 66,42 50,58 C34,74 66,82 50,105 L105,105 L105,-5 Z%22 fill=%22%23E63B2E%22/></g></svg>" />
 <script>
   (function () {
@@ -70,7 +70,7 @@
       </a>
       <nav class="navbar__links">
         <a href="index.html#explore">Explore</a>
-        <a href="network.html">Network</a>
+        <span class="navbar__links-current" aria-current="page">Network</span>
         <a href="index.html#register">Register a School</a>
       </nav>
       <div class="navbar__right">
@@ -85,85 +85,63 @@
     </div>
   </header>
 
-  <!-- Profile hero -->
+  <!-- Network hero -->
   <section class="hero profile-hero" id="top">
     <div class="hero__decor" aria-hidden="true">
       <span class="hero__blob hero__blob--1"></span>
       <span class="hero__blob hero__blob--2"></span>
       <span class="hero__blob hero__blob--3"></span>
-      <span class="hero__float-icon hero__float-icon--1">📚</span>
-      <span class="hero__float-icon hero__float-icon--2">🏆</span>
-      <span class="hero__float-icon hero__float-icon--3">🎭</span>
-      <span class="hero__float-icon hero__float-icon--4">🔬</span>
+      <span class="hero__float-icon hero__float-icon--1">🤝</span>
+      <span class="hero__float-icon hero__float-icon--2">🌍</span>
+      <span class="hero__float-icon hero__float-icon--3">💬</span>
+      <span class="hero__float-icon hero__float-icon--4">✨</span>
     </div>
     <div class="hero__inner" id="heroInner">
       <span class="pill" id="heroPill">
         <span class="pill__dot"></span>
-        Your Knot account
+        Your Knot network
       </span>
-      <h1 class="hero__title" id="heroTitle" aria-label="Your schools. Your clubs.">
-        Your schools.<br />Your <span class="accent">clubs</span>.
+      <h1 class="hero__title" id="heroTitle" aria-label="Find friends. Build something together.">
+        Find friends.<br />Build <span class="accent">something together</span>.
       </h1>
       <p class="hero__subtitle" id="heroSubtitle">
-        Everything you've registered and joined on Knot, all in one place — edit a school
-        or step away from a club any time.
+        Search for other Knot users by username, add them as friends, see the schools and
+        clubs they're part of, and invite them to start a combined club.
       </p>
     </div>
   </section>
 
   <!-- Signed-out state -->
-  <section class="profile-guard" id="profileGuard" hidden>
+  <section class="profile-guard" id="networkGuard" hidden>
     <div class="profile-guard__card">
       <span class="profile-guard__icon">🔒</span>
-      <h2>Sign in to see your profile</h2>
-      <p>Your registered schools and joined clubs are tied to your Knot account.</p>
+      <h2>Sign in to see your network</h2>
+      <p>Finding friends and sending club invites are tied to your Knot account.</p>
       <button class="register__btn" id="guardSignInBtn" type="button">Sign In</button>
     </div>
   </section>
 
   <!-- Signed-in content -->
-  <section class="profile-content" id="profileContent" hidden>
+  <section class="profile-content" id="networkContent" hidden>
 
-    <div class="profile-card">
-      <div class="profile-avatar-wrap">
-        <span class="profile-card__avatar" id="profileAvatar"></span>
-        <button class="profile-avatar-edit" id="avatarEditBtn" type="button" aria-label="Change profile picture">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
-        </button>
-        <input type="file" id="avatarInput" accept="image/*" hidden />
+    <div class="profile-section">
+      <h3>Find people</h3>
+      <div class="search-bar">
+        <svg class="search-bar__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="userSearchInput" placeholder="Search by username…" autocomplete="off" />
       </div>
-      <div>
-        <h2 id="profileName"></h2>
-        <p id="profileUsername" class="profile-card__username"></p>
-        <p id="profileEmail" class="profile-card__email"></p>
-        <button class="profile-avatar-remove" id="avatarRemoveBtn" type="button" hidden>Remove photo</button>
-      </div>
+      <div class="search-results" id="searchResults" hidden></div>
     </div>
 
-    <div class="profile-stats">
-      <div class="stat-card">
-        <span class="stat-card__value" id="statMySchools">0</span>
-        <span class="stat-card__label">Schools Registered</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-card__value" id="statMyClubs">0</span>
-        <span class="stat-card__label">Clubs Joined</span>
-      </div>
+    <div class="profile-section" id="invitesSection" hidden>
+      <h3>Club invites</h3>
+      <div class="invites-grid" id="invitesList"></div>
     </div>
 
     <div class="profile-section">
-      <div class="profile-section__header">
-        <h3>Schools you've registered</h3>
-        <a class="register__btn" href="index.html#register">+ Register a school</a>
-      </div>
-      <div class="profile-schools" id="myschoolsList"></div>
-      <p class="profile-empty" id="myschoolsEmpty" hidden>You haven't registered any schools yet.</p>
-    </div>
-
-    <div class="profile-section">
-      <h3>Clubs you're part of</h3>
-      <div class="profile-clubs" id="myclubsList"></div>
-      <p class="profile-empty" id="myclubsEmpty" hidden>You haven't joined any clubs yet — look for the 🌍 open-worldwide badge on a club's page to join.</p>
+      <h3>Your friends</h3>
+      <div class="friends-grid" id="friendsList"></div>
+      <p class="profile-empty" id="friendsEmpty" hidden>You haven't added any friends yet — search for a username above.</p>
     </div>
 
   </section>
@@ -265,95 +243,30 @@
     </div>
   </div>
 
-  <!-- Edit school modal -->
-  <div class="modal-overlay" id="editOverlay">
-    <div class="modal modal--register" role="dialog" aria-modal="true" aria-labelledby="editFormTitle">
-      <button class="modal__close" id="editClose" aria-label="Close">✕</button>
+  <!-- Combined club invite modal -->
+  <div class="modal-overlay" id="inviteOverlay">
+    <div class="modal modal--invite" role="dialog" aria-modal="true" aria-labelledby="inviteTitle">
+      <button class="modal__close" id="inviteClose" aria-label="Close">✕</button>
 
       <div class="register-form__intro">
-        <h2 id="editFormTitle">Edit school</h2>
-        <p>Update your school's details and club catalog.</p>
+        <h2 id="inviteTitle">Invite to a combined club</h2>
+        <p id="inviteSub">Propose a club you and your friend could run together across your schools.</p>
       </div>
 
-      <form id="editForm" novalidate>
-        <div class="form-grid">
-          <div class="form-field form-field--full">
-            <label for="efName">School name</label>
-            <input type="text" id="efName" maxlength="80" required autocomplete="off" />
-          </div>
-          <div class="form-field form-field--full">
-            <label for="efPhoto">School photo (optional)</label>
-            <div class="photo-upload" id="editPhotoUpload" tabindex="0" role="button" aria-label="Upload a school photo">
-              <input type="file" id="efPhoto" accept="image/*" hidden />
-              <div class="photo-upload__preview" id="editPhotoPreview">
-                <svg class="photo-upload__icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.7"/><path d="M21 15l-5-5-9 9"/></svg>
-                <span class="photo-upload__text">Click to upload a photo</span>
-                <span class="photo-upload__hint">JPG or PNG — resized automatically</span>
-              </div>
-            </div>
-            <button type="button" class="photo-upload__remove" id="editPhotoRemove" hidden>Remove photo</button>
-          </div>
-          <div class="form-field">
-            <label for="efCity">City</label>
-            <input type="text" id="efCity" maxlength="60" required autocomplete="off" />
-          </div>
-          <div class="form-field">
-            <label for="efCountry">Country</label>
-            <input type="text" id="efCountry" maxlength="60" required autocomplete="off" />
-          </div>
-          <div class="form-field">
-            <label for="efContinent">Continent</label>
-            <select id="efContinent" required>
-              <option value="" disabled>Choose a continent</option>
-              <option>Africa</option>
-              <option>Asia</option>
-              <option>Europe</option>
-              <option>North America</option>
-              <option>Oceania</option>
-              <option>South America</option>
-            </select>
-          </div>
-          <div class="form-field">
-            <label for="efFlag">Flag emoji (optional)</label>
-            <input type="text" id="efFlag" maxlength="8" autocomplete="off" placeholder="e.g. 🇵🇹" />
-          </div>
-          <div class="form-field">
-            <label for="efStudents">Students</label>
-            <input type="number" id="efStudents" min="0" max="200000" autocomplete="off" />
-          </div>
-          <div class="form-field">
-            <label for="efFounded">Founded year</label>
-            <input type="number" id="efFounded" min="1000" max="2100" autocomplete="off" />
-          </div>
-          <div class="form-field form-field--full">
-            <label for="efDescription">Short description</label>
-            <textarea id="efDescription" maxlength="220" required></textarea>
-          </div>
+      <form id="inviteForm" novalidate>
+        <div class="form-field form-field--full">
+          <label for="inviteClubName">Proposed club name</label>
+          <input type="text" id="inviteClubName" maxlength="80" required autocomplete="off" placeholder="e.g. Global Robotics Exchange" />
         </div>
-
-        <div class="register-form__clubs-header">
-          <h3>Clubs &amp; Activities</h3>
-          <span>At least one club with a name</span>
+        <div class="form-field form-field--full">
+          <label for="inviteMessage">Message (optional)</label>
+          <textarea id="inviteMessage" maxlength="220" placeholder="Say a bit about your idea…"></textarea>
         </div>
-        <div id="editClubRows"></div>
-        <button class="add-club-btn" id="editAddClubBtn" type="button">+ Add another club</button>
-
-        <p class="register-form__error" id="editError"></p>
-        <button class="register-form__submit" id="editSubmit" type="submit">Save changes</button>
+        <p class="register-form__error" id="inviteError"></p>
+        <button class="register-form__submit" id="inviteSubmit" type="submit">Send invite</button>
       </form>
     </div>
   </div>
-
-  <datalist id="clubCategoryList">
-    <option value="STEM"></option>
-    <option value="Arts"></option>
-    <option value="Sports"></option>
-    <option value="Academic"></option>
-    <option value="Community Service"></option>
-    <option value="Business &amp; Leadership"></option>
-    <option value="Media &amp; Publishing"></option>
-    <option value="Language &amp; Culture"></option>
-  </datalist>
 
   <!-- Toast notification -->
   <div class="toast" id="toast" role="status" aria-live="polite">
@@ -365,9 +278,7 @@
   <script src="js/theme.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/membership.js"></script>
-  <script src="js/image-utils.js"></script>
-  <script src="js/club-row-editor.js"></script>
-  <script src="js/profile.js"></script>
+  <script src="js/network.js"></script>
   <script src="js/intro.js"></script>
 </body>
 </html>

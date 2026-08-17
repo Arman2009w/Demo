@@ -119,8 +119,6 @@
   const modalClubs = document.getElementById("modalClubs");
   const modalClubCount = document.getElementById("modalClubCount");
 
-  const scrollToExploreBtn = document.getElementById("scrollToExplore");
-
   const state = {
     search: "",
     continent: "all",
@@ -263,10 +261,6 @@
         render();
         document.getElementById("explore").scrollIntoView({ behavior: "smooth" });
       });
-    });
-
-    scrollToExploreBtn.addEventListener("click", () => {
-      document.getElementById("explore").scrollIntoView({ behavior: "smooth" });
     });
 
     modalClose.addEventListener("click", closeModal);

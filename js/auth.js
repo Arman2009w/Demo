@@ -346,6 +346,11 @@
       ? ""
       : `<a class="user-menu__link" href="profile.html">My Profile</a>`;
 
+    const onNetworkPage = /(^|\/)network\.html$/.test(window.location.pathname);
+    const networkLink = onNetworkPage
+      ? ""
+      : `<a class="user-menu__link" href="network.html">My Network</a>`;
+
     els.authArea.innerHTML = `
       <div class="user-chip" id="userChip">
         <span class="user-chip__avatar">${avatarContent}</span>
@@ -357,6 +362,7 @@
             <span class="user-menu__email">${escapeHtml(user.email)}</span>
           </div>
           ${profileLink}
+          ${networkLink}
           <button class="user-menu__logout" id="logoutBtn" type="button">Log out</button>
         </div>
       </div>
@@ -433,10 +439,12 @@
     });
   }
 
-  // ---------- Public API for js/register.js ----------
+  // ---------- Public API for js/register.js and js/network.js ----------
   window.KnotAuth = {
     getCurrentUser,
-    updateCurrentUser
+    updateCurrentUser,
+    getAllUsers: getUsers,
+    getSessionEmail
   };
 
   document.addEventListener("DOMContentLoaded", init);
