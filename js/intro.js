@@ -21,17 +21,19 @@
 
   const TITLE_STEP_MS = 22;
 
+  // Shown once ever (not once per tab session) — localStorage persists
+  // across new tabs/windows/browser restarts, unlike sessionStorage.
   const SEEN_KEY = "knot_intro_seen";
   function introAlreadySeen() {
     try {
-      return sessionStorage.getItem(SEEN_KEY) === "1";
+      return localStorage.getItem(SEEN_KEY) === "1";
     } catch (e) {
       return false;
     }
   }
   function markIntroSeen() {
     try {
-      sessionStorage.setItem(SEEN_KEY, "1");
+      localStorage.setItem(SEEN_KEY, "1");
     } catch (e) {}
   }
 

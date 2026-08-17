@@ -34,7 +34,7 @@
   --navbar-bg: rgba(6, 7, 13, 0.72);
 
   --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
-  --font-body: "Inter", system-ui, sans-serif;
+  --font-body: "Space Grotesk", "Inter", system-ui, sans-serif;
 }
 
 /* Light theme — activated by [data-theme="light"] on <html>, set as early
@@ -886,10 +886,91 @@ body.intro-active {
 
 /* ---------- Hero ---------- */
 .hero {
+  position: relative;
   max-width: 900px;
   margin: 0 auto;
   padding: 96px 24px 64px;
   text-align: center;
+}
+
+.hero__inner {
+  position: relative;
+  z-index: 1;
+}
+
+.hero__decor {
+  position: absolute;
+  inset: -20px -40px auto -40px;
+  height: 460px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero__blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.28;
+  animation: heroBlobFloat 11s ease-in-out infinite;
+}
+
+.hero__blob--1 {
+  width: 260px;
+  height: 260px;
+  left: 2%;
+  top: 4%;
+  background: var(--brand-tangerine);
+}
+
+.hero__blob--2 {
+  width: 220px;
+  height: 220px;
+  right: 4%;
+  top: 0;
+  background: var(--brand-cinnabar);
+  animation-delay: -3.5s;
+}
+
+.hero__blob--3 {
+  width: 200px;
+  height: 200px;
+  left: 44%;
+  bottom: -10%;
+  background: var(--accent-2);
+  opacity: 0.2;
+  animation-delay: -7s;
+}
+
+@keyframes heroBlobFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(16px, -20px) scale(1.07); }
+}
+
+.hero__float-icon {
+  position: absolute;
+  font-size: 1.7rem;
+  opacity: 0.55;
+  animation: heroIconFloat 6.5s ease-in-out infinite;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.15));
+}
+
+.hero__float-icon--1 { left: 4%; top: 20%; animation-delay: 0s; }
+.hero__float-icon--2 { right: 6%; top: 26%; animation-delay: -1.6s; }
+.hero__float-icon--3 { left: 12%; bottom: 4%; animation-delay: -3.2s; }
+.hero__float-icon--4 { right: 10%; bottom: 8%; animation-delay: -4.8s; }
+
+@keyframes heroIconFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-16px) rotate(-6deg); }
+}
+
+@media (max-width: 720px) {
+  .hero__decor { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__blob, .hero__float-icon { animation: none; }
 }
 
 .pill {
