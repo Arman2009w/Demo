@@ -96,6 +96,7 @@
   const modalSchoolName = document.getElementById("modalSchoolName");
   const modalLocation = document.getElementById("modalLocation");
   const modalSubmittedBy = document.getElementById("modalSubmittedBy");
+  const modalWebsite = document.getElementById("modalWebsite");
   const modalMeta = document.getElementById("modalMeta");
   const modalDescription = document.getElementById("modalDescription");
   const modalClubs = document.getElementById("modalClubs");
@@ -407,6 +408,14 @@
     } else {
       modalSubmittedBy.hidden = true;
       modalSubmittedBy.textContent = "";
+    }
+
+    if (school.website) {
+      modalWebsite.hidden = false;
+      modalWebsite.href = school.website;
+    } else {
+      modalWebsite.hidden = true;
+      modalWebsite.removeAttribute("href");
     }
 
     modalMeta.innerHTML = `

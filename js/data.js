@@ -16,6 +16,7 @@ const SCHOOL_REGISTRY = [
     students: 970,
     founded: 1976,
     description: "A highly selective Dallas arts magnet in the city's Arts District, with alumni including Erykah Badu and Norah Jones.",
+    website: "https://btwhspva.dallasisd.org/",
     clubs: [
       { name: "Theatre Guild", category: "Arts", icon: "🎭", meets: "Mon & Wed, 4:00 PM", description: "Student-run drama productions staged across the school year." },
       { name: "Jazz Ensemble", category: "Arts", icon: "🎷", meets: "Tue & Thu, 4:00 PM", description: "Big-band and combo jazz performance, from standards to original charts." },
@@ -35,6 +36,7 @@ const SCHOOL_REGISTRY = [
     students: 1420,
     founded: 1829,
     description: "A historic independent school with a strong focus on classical academics and rowing.",
+    website: "https://www.kcs.org.uk/",
     clubs: [
       { name: "Model United Nations", category: "Academic", icon: "🏛️", meets: "Wed, 4:00 PM", description: "Delegates represent nations at regional and national MUN conferences." },
       { name: "Rowing Club", category: "Sports", icon: "🚣", meets: "Daily, 6:30 AM", description: "Trains on the Thames; competes at Henley Royal Regatta." },
@@ -54,6 +56,7 @@ const SCHOOL_REGISTRY = [
     students: 950,
     founded: 1878,
     description: "A public high school in Chiyoda historically famous for sending more graduates to the University of Tokyo than any other school.",
+    website: "https://hibiya-h.metro.ed.jp/",
     clubs: [
       { name: "Debate Club", category: "Academic", icon: "🗣️", meets: "Tue & Fri, 4:00 PM", description: "Competitive debate training for national high school tournaments." },
       { name: "Quiz Bowl Circle", category: "Academic", icon: "🧠", meets: "Wed, 3:45 PM", description: "Fast-paced academic quiz competitions across subjects." },
@@ -72,6 +75,7 @@ const SCHOOL_REGISTRY = [
     students: 3200,
     founded: 1949,
     description: "One of India's largest school networks, with strong STEM olympiad and classical dance traditions.",
+    website: "https://www.dpsrkp.net/",
     clubs: [
       { name: "Coding & AI Club", category: "STEM", icon: "💻", meets: "Tue & Thu, 3:30 PM", description: "Competitive programming, hackathons, and machine learning workshops." },
       { name: "Bharatanatyam Dance Troupe", category: "Arts", icon: "💃", meets: "Sat, 10:00 AM", description: "Classical South Indian dance training and annual showcase." },
@@ -91,6 +95,7 @@ const SCHOOL_REGISTRY = [
     students: 810,
     founded: 1689,
     description: "Berlin's oldest public school, founded for Huguenot refugee families and still teaching a bilingual French-German curriculum.",
+    website: "https://www.fg-berlin.eu/",
     clubs: [
       { name: "Théâtre Français", category: "Arts", icon: "🎭", meets: "Wed, 4:00 PM", description: "French-language drama club staging an annual production." },
       { name: "Model United Nations", category: "Academic", icon: "🏛️", meets: "Mon, 4:00 PM", description: "Bilingual delegation preparing for Franco-German MUN conferences." },
@@ -110,6 +115,7 @@ const SCHOOL_REGISTRY = [
     students: 1800,
     founded: 1870,
     description: "One of Brazil's oldest private schools, on a landmark heritage campus in São Paulo's Higienópolis district.",
+    website: "https://www.mackenzie.br/colegios/sao-paulo-higienopolis/",
     clubs: [
       { name: "Oratory & Debate Club", category: "Academic", icon: "🗣️", meets: "Wed, 3:30 PM", description: "Public speaking and competitive debate training." },
       { name: "Robotics Team", category: "STEM", icon: "🤖", meets: "Tue & Thu, 4:00 PM", description: "Builds robots for Brazilian national robotics competitions." },
@@ -129,6 +135,7 @@ const SCHOOL_REGISTRY = [
     students: 800,
     founded: 1849,
     description: "A historic Anglican boys' school in Rondebosch, one of South Africa's oldest and most prominent private schools.",
+    website: "https://www.bishops.org.za/",
     clubs: [
       { name: "Rowing Club", category: "Sports", icon: "🚣", meets: "Daily, 5:30 AM", description: "Trains for South African schools regattas." },
       { name: "Debating Society", category: "Academic", icon: "🗣️", meets: "Wed, 4:00 PM", description: "Competes in Western Cape schools debating leagues." },
@@ -148,6 +155,7 @@ const SCHOOL_REGISTRY = [
     students: 850,
     founded: 1926,
     description: "The first school in Kenya to offer secondary education to Africans; alumni include multiple Kenyan presidents.",
+    website: "https://www.alliancehighschool.ac.ke/",
     clubs: [
       { name: "Scouts", category: "Community Service", icon: "🏕️", meets: "Sat, 8:00 AM", description: "Outdoor skills, service projects, and leadership badges." },
       { name: "Drama Club", category: "Arts", icon: "🎭", meets: "Wed, 4:00 PM", description: "Stages productions for the Kenya Schools Drama Festival." },
@@ -167,6 +175,7 @@ const SCHOOL_REGISTRY = [
     students: 1085,
     founded: 1978,
     description: "A selective British-curriculum secondary school in Al Sufouh, founded on land offered by Sheikh Rashid bin Saeed Al Maktoum.",
+    website: "https://www.dubaicollege.org/",
     clubs: [
       { name: "Model United Nations", category: "Academic", icon: "🏛️", meets: "Mon, 4:00 PM", description: "Delegates compete at Gulf-region MUN conferences." },
       { name: "Duke of Edinburgh's Award", category: "Community Service", icon: "🥾", meets: "Sat, 8:00 AM", description: "Expedition, skill, and service work toward Bronze through Gold awards." },
@@ -186,6 +195,7 @@ const SCHOOL_REGISTRY = [
     students: 1680,
     founded: 1823,
     description: "One of Asia's oldest schools, with a formidable record in science olympiads and choir competitions.",
+    website: "https://www.ri.edu.sg/",
     clubs: [
       { name: "Science Research Programme", category: "STEM", icon: "🔬", meets: "Wed, 3:30 PM", description: "Independent research projects mentored by university partners." },
       { name: "Choir", category: "Arts", icon: "🎶", meets: "Tue & Fri, 4:00 PM", description: "Multi-award-winning choir performing at national competitions." },
@@ -204,6 +214,7 @@ const SCHOOL_REGISTRY = [
     students: 480,
     founded: 1989,
     description: "An elite science-specialized school producing top performers in international science olympiads.",
+    website: "https://sshs.sen.hs.kr/",
     clubs: [
       { name: "Physics Olympiad Team", category: "STEM", icon: "⚛️", meets: "Daily, 4:00 PM", description: "Trains competitors for the International Physics Olympiad." },
       { name: "Astronomy Club", category: "STEM", icon: "🔭", meets: "Fri, 7:00 PM", description: "Night observation sessions using the school's rooftop observatory." },
@@ -222,6 +233,7 @@ const SCHOOL_REGISTRY = [
     students: 2400,
     founded: 1888,
     description: "The oldest continuously operating accredited American school outside the United States, on a 14.6-acre campus.",
+    website: "https://www.asf.edu.mx/",
     clubs: [
       { name: "Model United Nations", category: "Academic", icon: "🏛️", meets: "Mon, 4:00 PM", description: "Delegates compete at Model UN conferences across Latin America." },
       { name: "National Honor Society", category: "Academic", icon: "🎓", meets: "Thu, 3:30 PM", description: "Academic honor society running peer-tutoring programs." },
@@ -240,6 +252,7 @@ const SCHOOL_REGISTRY = [
     students: 1400,
     founded: 1907,
     description: "A Marianist Catholic school on Calle de Castelló in a landmark early-20th-century building; alumni include King Felipe VI.",
+    website: "https://www.nspilar.com/",
     clubs: [
       { name: "Debate Club", category: "Academic", icon: "🗣️", meets: "Wed, 4:00 PM", description: "Competitive debate training for regional tournaments." },
       { name: "Robotics Club", category: "STEM", icon: "🤖", meets: "Tue & Thu, 4:00 PM", description: "Builds robots for Spanish national robotics competitions." },
@@ -258,6 +271,7 @@ const SCHOOL_REGISTRY = [
     students: 750,
     founded: 1878,
     description: "One of Italy's oldest classical liceos, housed in a former monastic building in central Florence.",
+    website: "https://www.liceoclassicogalileo.edu.it/",
     clubs: [
       { name: "Certamen (Classics Competition)", category: "Academic", icon: "📜", meets: "Tue, 4:00 PM", description: "Trains for Latin and Greek translation competitions." },
       { name: "Debate Club", category: "Academic", icon: "🗣️", meets: "Wed, 3:30 PM", description: "Weekly practice ahead of national debating tournaments." },
@@ -277,6 +291,7 @@ const SCHOOL_REGISTRY = [
     students: 1000,
     founded: 1876,
     description: "An upper-secondary school on Roslagsgatan known for its National Romantic-style tower building.",
+    website: "https://norrarealsgymnasium.stockholm/",
     clubs: [
       { name: "Debate Society", category: "Academic", icon: "🗣️", meets: "Wed, 3:30 PM", description: "Weekly practice for Swedish national school debating." },
       { name: "Student Newspaper", category: "Media & Publishing", icon: "📰", meets: "Thu, 3:30 PM", description: "Reports on school life and student affairs." },
@@ -296,6 +311,7 @@ const SCHOOL_REGISTRY = [
     students: 2560,
     founded: 1869,
     description: "A historic boys' school with an outsized reputation in rowing and rugby.",
+    website: "https://www.ags.school.nz/",
     clubs: [
       { name: "Rowing Club", category: "Sports", icon: "🚣", meets: "Daily, 5:30 AM", description: "One of the most decorated school rowing programs in the country." },
       { name: "Rugby Club", category: "Sports", icon: "🏉", meets: "Tue, Thu, Sat", description: "Multiple senior and junior teams competing regionally." },
@@ -315,6 +331,7 @@ const SCHOOL_REGISTRY = [
     students: 1920,
     founded: 1857,
     description: "A prestigious independent school with strong sailing, chess, and classics programs.",
+    website: "https://www.sydgram.nsw.edu.au/",
     clubs: [
       { name: "Sailing Club", category: "Sports", icon: "⛵", meets: "Sat, 9:00 AM", description: "Trains on Sydney Harbour, competing in interschool regattas." },
       { name: "Chess Club", category: "Academic", icon: "♟️", meets: "Thu, 1:00 PM", description: "Weekly tournaments and coaching for all skill levels." },
@@ -333,6 +350,7 @@ const SCHOOL_REGISTRY = [
     students: 960,
     founded: 1945,
     description: "An independent, coeducational day school on an 11-acre campus in Maadi, serving international families since the postwar period.",
+    website: "https://www.cacegypt.org/",
     clubs: [
       { name: "Model United Nations", category: "Academic", icon: "🏛️", meets: "Mon, 4:00 PM", description: "Delegates compete at Model UN conferences across the region." },
       { name: "National Honor Society", category: "Academic", icon: "🎓", meets: "Thu, 3:30 PM", description: "Academic honor society running peer-tutoring programs." },
@@ -370,6 +388,7 @@ const SCHOOL_REGISTRY = [
     students: 3600,
     founded: 1882,
     description: "Thailand's oldest public secondary school, founded by King Chulalongkorn; alumni include eight Thai prime ministers.",
+    website: "https://www.sk.ac.th/",
     clubs: [
       { name: "Football Club", category: "Sports", icon: "⚽", meets: "Daily, 4:00 PM", description: "Home of Suankularb's century-old football rivalry with Debsirin." },
       { name: "Scouts", category: "Community Service", icon: "🏕️", meets: "Sat, 8:00 AM", description: "Outdoor skills, service projects, and leadership training." },
@@ -389,6 +408,7 @@ const SCHOOL_REGISTRY = [
     students: 550,
     founded: 1935,
     description: "India's most storied boarding school, known for its sprawling Himalayan-foothill campus and a famously wide-ranging 'hobbies' program.",
+    website: "https://www.doonschool.com/",
     clubs: [
       { name: "Doon School Weekly", category: "Media & Publishing", icon: "📰", meets: "Fri, 4:00 PM", description: "One of India's oldest student-run newspapers, published continuously since 1936." },
       { name: "Photographic Society", category: "Arts", icon: "📷", meets: "Wed, 3:30 PM", description: "Darkroom and digital photography, with prints exhibited each term." },
@@ -407,6 +427,7 @@ const SCHOOL_REGISTRY = [
     students: 900,
     founded: 1875,
     description: "Once founded for the sons of Rajput nobility, now a leading co-ed boarding school famed for its palatial campus and equestrian tradition.",
+    website: "https://www.mayocollege.com/",
     clubs: [
       { name: "Polo & Equestrian Club", category: "Sports", icon: "🐎", meets: "Daily, 6:00 AM", description: "One of the school's oldest traditions, training on its own polo grounds." },
       { name: "Heritage Conservation Society", category: "Community Service", icon: "🏛️", meets: "Sat, 10:00 AM", description: "Documents and helps preserve Ajmer's historic monuments." },
@@ -426,6 +447,7 @@ const SCHOOL_REGISTRY = [
     students: 600,
     founded: 1897,
     description: "A boys' boarding school set inside the historic Gwalior Fort, known for its adventure sports and pioneering aeromodelling program.",
+    website: "https://www.scindia.edu/",
     clubs: [
       { name: "Aeromodelling Club", category: "STEM", icon: "✈️", meets: "Wed, 4:00 PM", description: "Designs and flies scale model aircraft, a decades-old Scindia tradition." },
       { name: "Mountaineering & Adventure Club", category: "Sports", icon: "🧗", meets: "Sat, 6:00 AM", description: "Rock-climbing and trekking expeditions in the surrounding hills." },
@@ -445,6 +467,7 @@ const SCHOOL_REGISTRY = [
     students: 1100,
     founded: 1845,
     description: "One of India's oldest English-medium schools, housed in a striking Gothic building and known for its disciplined tradition and debate culture.",
+    website: "https://www.lamartinierelucknow.org/",
     clubs: [
       { name: "National Cadet Corps", category: "Community Service", icon: "🎖️", meets: "Sat, 7:00 AM", description: "Discipline, drill, and leadership training with a century-long school tradition." },
       { name: "Martinian Debating Union", category: "Academic", icon: "🗣️", meets: "Wed, 4:00 PM", description: "Competitive debate training for state and national tournaments." },
@@ -464,6 +487,7 @@ const SCHOOL_REGISTRY = [
     students: 1090,
     founded: 1781,
     description: "An elite boarding school famous for the Harkness table discussion method and a globally diverse student body.",
+    website: "https://www.exeter.edu/",
     clubs: [
       { name: "Exeter Robotics Club", category: "STEM", icon: "🤖", meets: "Tue & Thu, 4:00 PM", description: "Builds competition robots for FIRST Robotics regionals." },
       { name: "The Exonian", category: "Media & Publishing", icon: "📰", meets: "Sun, 6:00 PM", description: "The oldest continuously-published prep school newspaper in the country." },
@@ -483,6 +507,7 @@ const SCHOOL_REGISTRY = [
     students: 1150,
     founded: 1778,
     description: "One of America's oldest secondary schools, known for need-blind admissions and a strong tradition of civic engagement.",
+    website: "https://www.andover.edu/",
     clubs: [
       { name: "Andover Robotics", category: "STEM", icon: "🤖", meets: "Mon & Thu, 4:00 PM", description: "Designs and builds robots for regional and national competitions." },
       { name: "Philomathean Society", category: "Academic", icon: "📚", meets: "Wed, 4:00 PM", description: "The school's historic literary and debate society, founded in 1811." },
@@ -502,6 +527,7 @@ const SCHOOL_REGISTRY = [
     students: 3300,
     founded: 1904,
     description: "A specialized public STEM high school in Manhattan known for its rigorous admissions exam and powerhouse robotics and debate teams.",
+    website: "https://www.stuy.edu/",
     clubs: [
       { name: "StuyPulse Robotics", category: "STEM", icon: "🤖", meets: "Daily, 3:30 PM", description: "Stuyvesant's FIRST Robotics Competition team, a fixture of the NYC regional." },
       { name: "Speech & Debate Team", category: "Academic", icon: "🗣️", meets: "Tue & Thu, 4:00 PM", description: "Competes across national circuit tournaments in multiple debate formats." },
@@ -520,6 +546,7 @@ const SCHOOL_REGISTRY = [
     students: 1850,
     founded: 1985,
     description: "A magnet school for science and technology with student research labs spanning neuroscience, robotics, and quantum computing.",
+    website: "https://tjhsst.fcps.edu/",
     clubs: [
       { name: "TJ Robotics", category: "STEM", icon: "🤖", meets: "Tue & Thu, 4:00 PM", description: "Builds and competes with robots across multiple FIRST leagues." },
       { name: "Science Research Symposium", category: "STEM", icon: "🔬", meets: "Wed, 3:30 PM", description: "Showcases student-led original research across every science discipline." },

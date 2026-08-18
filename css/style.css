@@ -1680,6 +1680,23 @@ body.intro-active {
   font-weight: 600;
 }
 
+.modal__website {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent-2);
+  transition: color 0.2s ease;
+}
+
+.modal__website:hover {
+  color: var(--accent);
+}
+
+.modal__website[hidden] {
+  display: none;
+}
+
 .modal__meta {
   display: flex;
   gap: 24px;
