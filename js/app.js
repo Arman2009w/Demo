@@ -426,14 +426,15 @@
 
     modalClubs.innerHTML = school.clubs
       .map((club) => {
-        const joinBlock = club.openMembership
-          ? window.KnotMembership.renderJoinBlock(
-              memberships,
-              window.KnotMembership.getClubKey(school.id, club.name),
-              club.name,
-              club.joinNote || "Open to students everywhere."
-            )
-          : "";
+        const defaultNote = club.openMembership
+          ? "Open to students everywhere."
+          : "Show you're part of this club.";
+        const joinBlock = window.KnotMembership.renderJoinBlock(
+          memberships,
+          window.KnotMembership.getClubKey(school.id, club.name),
+          club.name,
+          club.joinNote || defaultNote
+        );
 
         return `
         <div class="club-card">

@@ -57,7 +57,7 @@
 
     registry.forEach((school) => {
       school.clubs.forEach((club) => {
-        if (!club.openMembership || !window.KnotMembership) return;
+        if (!window.KnotMembership) return;
         const key = window.KnotMembership.getClubKey(school.id, club.name);
         const m = memberships[key];
         if (m && m.email && m.email.toLowerCase() === user.email.toLowerCase()) {

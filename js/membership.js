@@ -1,11 +1,13 @@
 /**
  * Knot club membership.
  *
- * Most clubs in the registry only make sense for enrolled students, but a
- * handful are flagged `openMembership: true` in js/data.js — these are
- * explicitly virtual/open chapters (online coding collectives, remote MUN
- * conferences, etc.) that any visitor can join. This file renders the
- * "Join this club" UI for those clubs only, and stores membership locally.
+ * Every club shows a "Join this club" option — a lightweight, symbolic
+ * membership record (not real-world enrollment) stored via
+ * window.KnotStore. A handful of clubs are flagged `openMembership: true`
+ * in js/data.js and carry a custom joinNote, marking them as explicitly
+ * virtual/global chapters (online coding collectives, remote MUN
+ * conferences, etc.) — that flag only changes the badge/copy shown, not
+ * whether joining is possible.
  *
  * js/app.js calls window.KnotMembership.getClubKey() and
  * .renderJoinBlock() while building each club card's HTML; this file then
@@ -58,7 +60,7 @@
       return `
         <div class="club-join club-join--done" data-club-key="${clubKey}" data-note="${escapeHtml(joinNote)}" data-name="${escapeHtml(clubName)}">
           <span class="club-join__check">✓</span>
-          <span>You've joined this club's global chapter${existing.name ? ` as ${escapeHtml(existing.name)}` : ""}.</span>
+          <span>You're a member of this club${existing.name ? ` as ${escapeHtml(existing.name)}` : ""}.</span>
         </div>
       `;
     }
@@ -92,7 +94,7 @@
   function renderDone(container, name) {
     container.innerHTML = `
       <span class="club-join__check">✓</span>
-      <span>You've joined this club's global chapter${name ? ` as ${escapeHtml(name)}` : ""}.</span>
+      <span>You're a member of this club${name ? ` as ${escapeHtml(name)}` : ""}.</span>
     `;
     container.classList.add("club-join--done");
   }
