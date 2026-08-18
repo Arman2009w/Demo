@@ -130,25 +130,35 @@ select, input {
 .bg-glow {
   position: fixed;
   z-index: -1;
-  width: 640px;
-  height: 640px;
+  width: 900px;
+  height: 900px;
   border-radius: 50%;
-  filter: blur(120px);
-  opacity: 0.35;
+  filter: blur(140px);
+  opacity: 0.4;
   pointer-events: none;
 }
 
 .bg-glow--one {
-  top: -220px;
-  left: -160px;
+  top: -280px;
+  left: -220px;
   background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
 }
 
 .bg-glow--two {
-  top: 200px;
-  right: -220px;
+  bottom: -300px;
+  right: -260px;
   background: radial-gradient(circle, var(--accent-2) 0%, transparent 70%);
-  opacity: 0.25;
+  opacity: 0.32;
+}
+
+.bg-glow--three {
+  top: 50%;
+  left: 50%;
+  width: 1200px;
+  height: 1200px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, var(--accent) 0%, transparent 72%);
+  opacity: 0.16;
 }
 
 body.intro-active {
