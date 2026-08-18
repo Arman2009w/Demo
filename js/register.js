@@ -176,7 +176,7 @@
   }
 
   // ---------- submit ----------
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     els.error.textContent = "";
 
@@ -218,7 +218,7 @@
       registeredBy: user ? user.username : null
     };
 
-    window.KnotRegistry.addSchool(school);
+    await window.KnotRegistry.addSchool(school);
     closeRegisterModal();
     showToast(`${name} was added to the registry!`);
     highlightNewCard(school.id);

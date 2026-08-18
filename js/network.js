@@ -1,98 +1,23 @@
 /**
  * Knot network page.
  *
- * Lets a signed-in user search the local account directory by username,
+ * Lets a signed-in user search the account directory by username,
  * add/remove friends, see a friend's registered schools and joined open
- * clubs, and send/accept "combined club" invites. Everything lives in
- * localStorage alongside the rest of the demo's data:
- *   - clubsphere_friends:      { [emailLower]: [friendEmailLower, ...] } (symmetric)
- *   - clubsphere_club_invites: [ { id, fromEmail, fromUsername, fromName,
- *                                  toEmail, toUsername, clubName, message,
- *                                  status, createdAt } ]
+ * clubs, and send/accept "combined club" invites. All of it goes through
+ * window.KnotStore (js/store.js) — a shared Firestore database if one is
+ * configured there, otherwise this browser's localStorage only. Every
+ * read here is deliberately a fresh call (no local caching) so a friend
+ * who just signed up elsewhere, or just accepted an invite, shows up
+ * without needing a reload.
  */
 
 (function () {
   "use strict";
 
-  const FRIENDS_KEY = "clubsphere_friends";
-  const INVITES_KEY = "clubsphere_club_invites";
-  const CUSTOM_SCHOOLS_KEY = "clubsphere_custom_schools";
-  const MEMBERSHIPS_KEY = "clubsphere_memberships";
-
   let els = {};
   let toastTimer = null;
   let inviteTargetEmail = null;
-
-  // ---------- storage ----------
-  function getFriendsMap() {
-    try {
-      return JSON.parse(localStorage.getItem(FRIENDS_KEY)) || {};
-    } catch {
-      return {};
-    }
-  }
-
-  function saveFriendsMap(map) {
-    localStorage.setItem(FRIENDS_KEY, JSON.stringify(map));
-  }
-
-  function getInvites() {
-    try {
-      return JSON.parse(localStorage.getItem(INVITES_KEY)) || [];
-    } catch {
-      return [];
-    }
-  }
-
-  function saveInvites(list) {
-    localStorage.setItem(INVITES_KEY, JSON.stringify(list));
-  }
-
-  function getCustomSchools() {
-    try {
-      return JSON.parse(localStorage.getItem(CUSTOM_SCHOOLS_KEY)) || [];
-    } catch {
-      return [];
-    }
-  }
-
-  function getMemberships() {
-    try {
-      return JSON.parse(localStorage.getItem(MEMBERSHIPS_KEY)) || {};
-    } catch {
-      return {};
-    }
-  }
-
-  function getFullRegistry() {
-    return [...(window.SCHOOL_REGISTRY || []), ...getCustomSchools()];
-  }
-
-  function getAllUsers() {
-    return window.KnotAuth?.getAllUsers?.() || {};
-  }
-
-  function getFriendEmails(email) {
-    return getFriendsMap()[email] || [];
-  }
-
-  function areFriends(emailA, emailB) {
-    return getFriendEmails(emailA).includes(emailB);
-  }
-
-  function addFriend(emailA, emailB) {
-    const map = getFriendsMap();
-    map[emailA] = Array.from(new Set([...(map[emailA] || []), emailB]));
-    map[emailB] = Array.from(new Set([...(map[emailB] || []), emailA]));
-    saveFriendsMap(map);
-  }
-
-  function removeFriend(emailA, emailB) {
-    const map = getFriendsMap();
-    map[emailA] = (map[emailA] || []).filter((e) => e !== emailB);
-    map[emailB] = (map[emailB] || []).filter((e) => e !== emailA);
-    saveFriendsMap(map);
-  }
+  let searchDebounce = null;
 
   // ---------- helpers ----------
   function escapeHtml(str) {
@@ -117,10 +42,17 @@
       : initials(user.name || user.username);
   }
 
-  function userActivity(user) {
-    const schools = getCustomSchools().filter((s) => s.registeredBy === user.username);
-    const memberships = getMemberships();
-    const registry = getFullRegistry();
+  async function getFullRegistry() {
+    return [...(window.SCHOOL_REGISTRY || []), ...(await window.KnotStore.getCustomSchools())];
+  }
+
+  async function userActivity(user) {
+    const [customSchools, memberships, registry] = await Promise.all([
+      window.KnotStore.getCustomSchools(),
+      window.KnotStore.getMemberships(),
+      getFullRegistry()
+    ]);
+    const schools = customSchools.filter((s) => s.registeredBy === user.username);
     const clubs = [];
 
     registry.forEach((school) => {
@@ -167,7 +99,7 @@
   }
 
   // ---------- render ----------
-  function render() {
+  async function render() {
     const user = window.KnotAuth?.getCurrentUser?.();
 
     if (!user) {
@@ -179,12 +111,10 @@
     els.guard.hidden = true;
     els.content.hidden = false;
 
-    renderSearch(els.searchInput.value);
-    renderInvites(user);
-    renderFriends(user);
+    await Promise.all([renderSearch(els.searchInput.value), renderInvites(user), renderFriends(user)]);
   }
 
-  function renderSearch(query) {
+  async function renderSearch(query) {
     const me = window.KnotAuth.getCurrentUser();
     const q = query.trim().toLowerCase();
 
@@ -195,7 +125,15 @@
     }
 
     const meEmail = me.email.toLowerCase();
-    const matches = Object.values(getAllUsers())
+    const [allUsers, friendEmails] = await Promise.all([
+      window.KnotStore.getAllUsers(),
+      window.KnotStore.getFriends(meEmail)
+    ]);
+
+    // The query may have changed while this was in flight.
+    if (els.searchInput.value.trim().toLowerCase() !== q) return;
+
+    const matches = Object.values(allUsers)
       .filter((u) => u.username && u.email.toLowerCase() !== meEmail && u.username.toLowerCase().includes(q))
       .slice(0, 12);
 
@@ -209,7 +147,7 @@
     els.searchResults.innerHTML = matches
       .map((u) => {
         const email = u.email.toLowerCase();
-        const isFriend = areFriends(meEmail, email);
+        const isFriend = friendEmails.includes(email);
         return `
           <div class="search-result">
             <span class="friend-card__avatar">${avatarHtml(u, "friend-card__avatar")}</span>
@@ -227,9 +165,11 @@
       .join("");
   }
 
-  function renderInvites(me) {
+  async function renderInvites(me) {
     const meEmail = me.email.toLowerCase();
-    const invites = getInvites().filter((inv) => inv.status === "pending" && inv.toEmail === meEmail);
+    const invites = (await window.KnotStore.getInvitesFor(meEmail)).filter(
+      (inv) => inv.status === "pending" && inv.toEmail === meEmail
+    );
 
     els.invitesSection.hidden = invites.length === 0;
     els.invitesList.innerHTML = invites
@@ -239,7 +179,7 @@
           <p>@${escapeHtml(inv.fromUsername)} wants to start "<strong>${escapeHtml(inv.clubName)}</strong>" with you.</p>
           ${inv.message ? `<p class="invite-card__message">"${escapeHtml(inv.message)}"</p>` : ""}
           <div class="friend-card__actions">
-            <button class="profile-btn profile-btn--edit" type="button" data-action="accept" data-id="${escapeHtml(inv.id)}">Accept</button>
+            <button class="profile-btn profile-btn--edit" type="button" data-action="accept" data-id="${escapeHtml(inv.id)}" data-from-username="${escapeHtml(inv.fromUsername)}" data-club-name="${escapeHtml(inv.clubName)}">Accept</button>
             <button class="profile-btn profile-btn--delete" type="button" data-action="decline" data-id="${escapeHtml(inv.id)}">Decline</button>
           </div>
         </div>
@@ -248,17 +188,19 @@
       .join("");
   }
 
-  function renderFriends(me) {
+  async function renderFriends(me) {
     const meEmail = me.email.toLowerCase();
-    const all = getAllUsers();
-    const friends = getFriendEmails(meEmail)
-      .map((email) => all[email])
-      .filter(Boolean);
+    const [friendEmails, allUsers] = await Promise.all([
+      window.KnotStore.getFriends(meEmail),
+      window.KnotStore.getAllUsers()
+    ]);
+    const friends = friendEmails.map((email) => allUsers[email]).filter(Boolean);
 
     els.friendsEmpty.hidden = friends.length > 0;
-    els.friendsList.innerHTML = friends
-      .map((f) => {
-        const { schools, clubs } = userActivity(f);
+
+    const cards = await Promise.all(
+      friends.map(async (f) => {
+        const { schools, clubs } = await userActivity(f);
         const email = f.email.toLowerCase();
 
         const schoolsHtml = schools.length
@@ -306,12 +248,14 @@
           </div>
         `;
       })
-      .join("");
+    );
+
+    els.friendsList.innerHTML = cards.join("");
   }
 
   // ---------- invite modal ----------
-  function openInviteModal(email) {
-    const all = getAllUsers();
+  async function openInviteModal(email) {
+    const all = await window.KnotStore.getAllUsers();
     const target = all[email];
     if (!target) return;
 
@@ -330,12 +274,12 @@
     inviteTargetEmail = null;
   }
 
-  function submitInvite(e) {
+  async function submitInvite(e) {
     e.preventDefault();
     if (!inviteTargetEmail) return;
 
     const me = window.KnotAuth.getCurrentUser();
-    const all = getAllUsers();
+    const all = await window.KnotStore.getAllUsers();
     const target = all[inviteTargetEmail];
     if (!me || !target) return;
 
@@ -345,8 +289,7 @@
       return;
     }
 
-    const invites = getInvites();
-    invites.push({
+    await window.KnotStore.addInvite({
       id: `inv_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
       fromEmail: me.email.toLowerCase(),
       fromUsername: me.username,
@@ -358,22 +301,16 @@
       status: "pending",
       createdAt: new Date().toISOString()
     });
-    saveInvites(invites);
 
     closeInviteModal();
     showToast(`Invite sent to @${target.username}.`);
   }
 
-  function respondToInvite(id, accept) {
-    const invites = getInvites();
-    const invite = invites.find((inv) => inv.id === id);
-    if (!invite) return;
-
-    invite.status = accept ? "accepted" : "declined";
-    saveInvites(invites);
+  async function respondToInvite(id, accept, fromUsername, clubName) {
+    await window.KnotStore.updateInviteStatus(id, accept ? "accepted" : "declined");
 
     if (accept) {
-      showToast(`You and @${invite.fromUsername} are now planning "${invite.clubName}" together!`);
+      showToast(`You and @${fromUsername} are now planning "${clubName}" together!`);
     }
 
     render();
@@ -397,9 +334,12 @@
       document.getElementById("signInBtn")?.click();
     });
 
-    els.searchInput.addEventListener("input", () => renderSearch(els.searchInput.value));
+    els.searchInput.addEventListener("input", () => {
+      clearTimeout(searchDebounce);
+      searchDebounce = setTimeout(() => renderSearch(els.searchInput.value), 250);
+    });
 
-    els.searchResults.addEventListener("click", (e) => {
+    els.searchResults.addEventListener("click", async (e) => {
       const btn = e.target.closest("[data-action]");
       if (!btn) return;
       const me = window.KnotAuth.getCurrentUser();
@@ -408,16 +348,16 @@
       const email = btn.dataset.email;
 
       if (btn.dataset.action === "add") {
-        addFriend(meEmail, email);
+        await window.KnotStore.addFriend(meEmail, email);
         showToast("Friend added.");
       } else if (btn.dataset.action === "remove") {
-        removeFriend(meEmail, email);
+        await window.KnotStore.removeFriend(meEmail, email);
         showToast("Friend removed.");
       }
       render();
     });
 
-    els.friendsList.addEventListener("click", (e) => {
+    els.friendsList.addEventListener("click", async (e) => {
       const btn = e.target.closest("[data-action]");
       if (!btn) return;
       const me = window.KnotAuth.getCurrentUser();
@@ -426,7 +366,7 @@
       if (btn.dataset.action === "invite") {
         openInviteModal(btn.dataset.email);
       } else if (btn.dataset.action === "remove") {
-        removeFriend(me.email.toLowerCase(), btn.dataset.email);
+        await window.KnotStore.removeFriend(me.email.toLowerCase(), btn.dataset.email);
         showToast("Friend removed.");
         render();
       }
@@ -435,7 +375,7 @@
     els.invitesList.addEventListener("click", (e) => {
       const btn = e.target.closest("[data-action]");
       if (!btn) return;
-      respondToInvite(btn.dataset.id, btn.dataset.action === "accept");
+      respondToInvite(btn.dataset.id, btn.dataset.action === "accept", btn.dataset.fromUsername, btn.dataset.clubName);
     });
 
     els.inviteClose.addEventListener("click", closeInviteModal);

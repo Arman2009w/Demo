@@ -7,28 +7,10 @@
 (function () {
   "use strict";
 
-  const CUSTOM_SCHOOLS_KEY = "clubsphere_custom_schools";
-
-  function loadCustomSchools() {
-    try {
-      return JSON.parse(localStorage.getItem(CUSTOM_SCHOOLS_KEY)) || [];
-    } catch {
-      return [];
-    }
-  }
-
-  function persistCustomSchools() {
-    const custom = registry.filter((s) => s.custom);
-    try {
-      localStorage.setItem(CUSTOM_SCHOOLS_KEY, JSON.stringify(custom));
-    } catch (e) {
-      // Storage quota exceeded (photos can be large) — the school still
-      // renders for this session, it just won't survive a reload.
-      console.warn("Could not save the registry locally — storage may be full.", e);
-    }
-  }
-
-  const registry = [...(window.SCHOOL_REGISTRY || []), ...loadCustomSchools()];
+  // Built-in schools ship as static data in js/data.js — the same on every
+  // device already, so only user-registered ("custom") schools need to go
+  // through window.KnotStore (local or shared Firestore, see js/store.js).
+  const registry = [...(window.SCHOOL_REGISTRY || [])];
 
   const BANNER_PALETTES = [
     ["#7c5cff", "#4a7bff"],
@@ -129,7 +111,10 @@
   };
 
   // ---------- Init ----------
-  function init() {
+  async function init() {
+    const customSchools = await window.KnotStore.getCustomSchools();
+    registry.push(...customSchools);
+
     populateFilterOptions();
     updateStats();
     attachEvents();
@@ -389,7 +374,9 @@
   }
 
   // ---------- Modal ----------
-  function openModal(school) {
+  async function openModal(school) {
+    const memberships = await window.KnotStore.getMemberships();
+
     modalMedia.style.backgroundImage = getBannerGradient(school.id);
     modalMedia.classList.toggle("modal__media--photo", Boolean(school.photo));
 
@@ -441,6 +428,7 @@
       .map((club) => {
         const joinBlock = club.openMembership
           ? window.KnotMembership.renderJoinBlock(
+              memberships,
               window.KnotMembership.getClubKey(school.id, club.name),
               club.name,
               club.joinNote || "Open to students everywhere."
@@ -482,9 +470,9 @@
 
   // ---------- Public API for js/register.js ----------
   window.KnotRegistry = {
-    addSchool(school) {
+    async addSchool(school) {
       registry.push(school);
-      persistCustomSchools();
+      await window.KnotStore.addCustomSchool(school);
       populateFilterOptions();
       updateStats();
       render();

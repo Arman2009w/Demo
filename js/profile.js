@@ -4,15 +4,13 @@
  * Shows the schools a signed-in user has registered (with edit/delete) and
  * the open-membership clubs they've joined (with leave). This page has no
  * in-memory registry of its own — js/app.js's registry only exists on
- * index.html — so it reads the same localStorage keys directly and stays
- * in sync purely because both pages share the same browser storage.
+ * index.html — so it reads straight from window.KnotStore (js/store.js)
+ * on every render instead.
  */
 
 (function () {
   "use strict";
 
-  const CUSTOM_SCHOOLS_KEY = "clubsphere_custom_schools";
-  const MEMBERSHIPS_KEY = "clubsphere_memberships";
   const MAX_SOURCE_FILE_BYTES = 20 * 1024 * 1024; // 20MB, before compression
   const MAX_PHOTO_DIMENSION = 900;
 
@@ -34,36 +32,8 @@
   let toastTimer = null;
 
   // ---------- storage ----------
-  function getCustomSchools() {
-    try {
-      return JSON.parse(localStorage.getItem(CUSTOM_SCHOOLS_KEY)) || [];
-    } catch {
-      return [];
-    }
-  }
-
-  function saveCustomSchools(schools) {
-    try {
-      localStorage.setItem(CUSTOM_SCHOOLS_KEY, JSON.stringify(schools));
-    } catch (e) {
-      console.warn("Could not save schools locally — storage may be full.", e);
-    }
-  }
-
-  function getMemberships() {
-    try {
-      return JSON.parse(localStorage.getItem(MEMBERSHIPS_KEY)) || {};
-    } catch {
-      return {};
-    }
-  }
-
-  function saveMemberships(memberships) {
-    localStorage.setItem(MEMBERSHIPS_KEY, JSON.stringify(memberships));
-  }
-
-  function getFullRegistry() {
-    return [...(window.SCHOOL_REGISTRY || []), ...getCustomSchools()];
+  async function getFullRegistry() {
+    return [...(window.SCHOOL_REGISTRY || []), ...(await window.KnotStore.getCustomSchools())];
   }
 
   // ---------- helpers ----------
@@ -145,7 +115,7 @@
   }
 
   // ---------- render ----------
-  function render() {
+  async function render() {
     const user = window.KnotAuth?.getCurrentUser?.();
 
     if (!user) {
@@ -162,8 +132,9 @@
     els.username.textContent = `@${user.username}`;
     els.email.textContent = user.email;
 
-    const mySchools = getCustomSchools().filter((s) => s.registeredBy === user.username);
-    const myClubs = getJoinedClubs(user);
+    const customSchools = await window.KnotStore.getCustomSchools();
+    const mySchools = customSchools.filter((s) => s.registeredBy === user.username);
+    const myClubs = await getJoinedClubs(user);
 
     els.statSchools.textContent = mySchools.length;
     els.statClubs.textContent = myClubs.length;
@@ -199,10 +170,10 @@
       .join("");
   }
 
-  function getJoinedClubs(user) {
+  async function getJoinedClubs(user) {
     if (!window.KnotMembership) return [];
-    const memberships = getMemberships();
-    const registry = getFullRegistry();
+    const memberships = await window.KnotStore.getMemberships();
+    const registry = await getFullRegistry();
     const joined = [];
 
     registry.forEach((school) => {
@@ -260,8 +231,8 @@
     }
 
     window.KnotImageUtils.compressImage(file, 400, 0.85)
-      .then((dataUrl) => {
-        window.KnotAuth.updateCurrentUser({ picture: dataUrl });
+      .then((dataUrl) => window.KnotAuth.updateCurrentUser({ picture: dataUrl }))
+      .then(() => {
         showToast("Profile picture updated.");
         render();
       })
@@ -271,13 +242,12 @@
   }
 
   function removeAvatar() {
-    window.KnotAuth.updateCurrentUser({ picture: "" });
-    render();
+    window.KnotAuth.updateCurrentUser({ picture: "" }).then(() => render());
   }
 
   // ---------- edit / delete school ----------
-  function openEdit(schoolId) {
-    const schools = getCustomSchools();
+  async function openEdit(schoolId) {
+    const schools = await window.KnotStore.getCustomSchools();
     const school = schools.find((s) => s.id === schoolId);
     if (!school) return;
 
@@ -306,7 +276,7 @@
     editingSchoolId = null;
   }
 
-  function handleEditSubmit(e) {
+  async function handleEditSubmit(e) {
     e.preventDefault();
     els.editError.textContent = "";
 
@@ -326,13 +296,13 @@
       return;
     }
 
-    const schools = getCustomSchools();
-    const idx = schools.findIndex((s) => s.id === editingSchoolId);
-    if (idx === -1) return;
+    const schools = await window.KnotStore.getCustomSchools();
+    const existing = schools.find((s) => s.id === editingSchoolId);
+    if (!existing) return;
 
     const currentYear = new Date().getFullYear();
-    schools[idx] = {
-      ...schools[idx],
+    const updated = {
+      ...existing,
       name,
       city,
       country,
@@ -340,40 +310,32 @@
       flag: els.efFlag.value.trim() || "🏫",
       photo: selectedPhoto || undefined,
       students: Math.max(0, Number(els.efStudents.value) || 0),
-      founded: Number(els.efFounded.value) || schools[idx].founded || currentYear,
+      founded: Number(els.efFounded.value) || existing.founded || currentYear,
       description,
       clubs
     };
 
-    saveCustomSchools(schools);
+    await window.KnotStore.updateCustomSchool(updated);
     closeEdit();
     showToast(`${name} was updated.`);
     render();
   }
 
-  function deleteSchool(schoolId) {
-    const schools = getCustomSchools();
+  async function deleteSchool(schoolId) {
+    const schools = await window.KnotStore.getCustomSchools();
     const school = schools.find((s) => s.id === schoolId);
     if (!school) return;
     if (!confirm(`Remove "${school.name}" from the registry? This can't be undone.`)) return;
 
-    saveCustomSchools(schools.filter((s) => s.id !== schoolId));
-
-    // Clean up any memberships tied to this school's clubs.
-    const memberships = getMemberships();
-    Object.keys(memberships).forEach((key) => {
-      if (key.startsWith(`${schoolId}::`)) delete memberships[key];
-    });
-    saveMemberships(memberships);
+    await window.KnotStore.deleteCustomSchool(schoolId);
+    await window.KnotStore.deleteMembershipsForSchool(schoolId);
 
     showToast(`${school.name} was removed.`);
     render();
   }
 
-  function leaveClub(key) {
-    const memberships = getMemberships();
-    delete memberships[key];
-    saveMemberships(memberships);
+  async function leaveClub(key) {
+    await window.KnotStore.deleteMembership(key);
     render();
   }
 

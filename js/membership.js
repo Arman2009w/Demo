@@ -16,24 +16,8 @@
 (function () {
   "use strict";
 
-  const MEMBERSHIPS_KEY = "clubsphere_memberships";
-
-  function getMemberships() {
-    try {
-      return JSON.parse(localStorage.getItem(MEMBERSHIPS_KEY)) || {};
-    } catch {
-      return {};
-    }
-  }
-
-  function getMembership(clubKey) {
-    return getMemberships()[clubKey] || null;
-  }
-
-  function saveMembership(clubKey, name, email) {
-    const memberships = getMemberships();
-    memberships[clubKey] = { name, email, joinedAt: new Date().toISOString() };
-    localStorage.setItem(MEMBERSHIPS_KEY, JSON.stringify(memberships));
+  async function saveMembership(clubKey, name, email) {
+    await window.KnotStore.saveMembership(clubKey, { name, email, joinedAt: new Date().toISOString() });
   }
 
   function slugify(str) {
@@ -67,8 +51,8 @@
     `;
   }
 
-  function renderJoinBlock(clubKey, clubName, joinNote) {
-    const existing = getMembership(clubKey);
+  function renderJoinBlock(memberships, clubKey, clubName, joinNote) {
+    const existing = memberships[clubKey] || null;
 
     if (existing) {
       return `

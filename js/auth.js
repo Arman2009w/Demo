@@ -2,11 +2,22 @@
  * Knot authentication.
  *
  * Sign up / log in with Google. New accounts must pick a unique username,
- * checked against every other account in the local registry.
+ * checked against every other account in the shared registry (see
+ * js/store.js — window.KnotStore, either localStorage-only or a shared
+ * Firestore database depending on configuration).
  *
- * This site has no backend, so accounts live in localStorage:
- *   - clubsphere_users:   { [emailLowercase]: { email, name, picture, username, createdAt } }
- *   - clubsphere_session: emailLowercase of the signed-in user, or absent
+ * getCurrentUser() stays fully synchronous (everything else in the
+ * codebase calls it that way) by keeping a small local mirror of just
+ * *this device's* signed-in user in clubsphere_current_user_cache. That
+ * mirror is written every time we know the authoritative value (right
+ * after sign-in, after updateCurrentUser(), and opportunistically
+ * refreshed from the real store on load) — it's a read cache, never the
+ * source of truth. Anything that needs the full account directory (the
+ * network page's search, username-uniqueness checks) goes through
+ * window.KnotStore directly and is async.
+ *
+ * clubsphere_session (which email is signed in on *this device*) is
+ * correctly local-only — it isn't shared data.
  *
  * To enable REAL Google sign-in:
  *   1. Create an OAuth Client ID at https://console.cloud.google.com/apis/credentials
@@ -24,8 +35,8 @@
     GOOGLE_CLIENT_ID: "710729698743-i9tjrhbmiqceuhd288lpj61ll732l0vh.apps.googleusercontent.com"
   };
 
-  const USERS_KEY = "clubsphere_users";
   const SESSION_KEY = "clubsphere_session";
+  const CURRENT_USER_CACHE_KEY = "clubsphere_current_user_cache";
   const USERNAME_RE = /^[a-zA-Z0-9_]{3,20}$/;
 
   const DEMO_ACCOUNTS = [
@@ -37,18 +48,6 @@
   let pendingProfile = null;
 
   // ---------- storage helpers ----------
-  function getUsers() {
-    try {
-      return JSON.parse(localStorage.getItem(USERS_KEY)) || {};
-    } catch {
-      return {};
-    }
-  }
-
-  function saveUsers(users) {
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
-  }
-
   function getSessionEmail() {
     return localStorage.getItem(SESSION_KEY);
   }
@@ -58,26 +57,62 @@
     else localStorage.removeItem(SESSION_KEY);
   }
 
+  function getCurrentUserCache() {
+    try {
+      return JSON.parse(localStorage.getItem(CURRENT_USER_CACHE_KEY)) || {};
+    } catch {
+      return {};
+    }
+  }
+
+  function cacheCurrentUser(user) {
+    const cache = getCurrentUserCache();
+    cache[user.email.toLowerCase()] = user;
+    try {
+      localStorage.setItem(CURRENT_USER_CACHE_KEY, JSON.stringify(cache));
+    } catch {}
+  }
+
+  // Synchronous by design — see file header. Reads the local mirror, not
+  // the shared store.
   function getCurrentUser() {
     const email = getSessionEmail();
     if (!email) return null;
-    return getUsers()[email] || null;
+    return getCurrentUserCache()[email] || null;
   }
 
-  function updateCurrentUser(updates) {
+  async function updateCurrentUser(updates) {
     const email = getSessionEmail();
     if (!email) return null;
-    const users = getUsers();
+    const users = await window.KnotStore.getAllUsers();
     if (!users[email]) return null;
-    users[email] = { ...users[email], ...updates };
-    saveUsers(users);
+    const updated = { ...users[email], ...updates };
+    await window.KnotStore.saveUser(email, updated);
+    cacheCurrentUser(updated);
     renderAuthArea();
-    return users[email];
+    return updated;
   }
 
-  function isUsernameTaken(username, exceptEmail) {
+  // Re-fetches the signed-in user from the real store in the background
+  // so a change made on another device (or another tab) shows up here
+  // without blocking the first, cache-backed paint.
+  async function refreshCurrentUserFromStore() {
+    const email = getSessionEmail();
+    if (!email) return;
+    const users = await window.KnotStore.getAllUsers();
+    const fresh = users[email];
+    if (!fresh) return;
+    const before = JSON.stringify(getCurrentUserCache()[email] || null);
+    if (JSON.stringify(fresh) !== before) {
+      cacheCurrentUser(fresh);
+      renderAuthArea();
+    }
+  }
+
+  async function isUsernameTaken(username, exceptEmail) {
     const lower = username.toLowerCase();
-    return Object.entries(getUsers()).some(
+    const users = await window.KnotStore.getAllUsers();
+    return Object.entries(users).some(
       ([email, u]) => u.username && u.username.toLowerCase() === lower && email !== exceptEmail
     );
   }
@@ -226,15 +261,16 @@
   }
 
   // ---------- shared post-auth flow ----------
-  function onGoogleProfile(profile) {
+  async function onGoogleProfile(profile) {
     pendingProfile = profile;
     const emailLower = profile.email.toLowerCase();
-    const users = getUsers();
+    const users = await window.KnotStore.getAllUsers();
     const existing = users[emailLower];
 
     if (existing && existing.username) {
-      users[emailLower] = { ...existing, name: profile.name, picture: profile.picture || "" };
-      saveUsers(users);
+      const updated = { ...existing, name: profile.name, picture: profile.picture || "" };
+      await window.KnotStore.saveUser(emailLower, updated);
+      cacheCurrentUser(updated);
       setSessionEmail(emailLower);
       pendingProfile = null;
       closeAuthModal();
@@ -245,18 +281,18 @@
     showUsernameStep(profile, existing);
   }
 
-  function showUsernameStep(profile, existing) {
+  async function showUsernameStep(profile, existing) {
     els.stepGoogle.hidden = true;
     els.stepUsername.hidden = false;
     els.authAvatar.textContent = initials(profile.name || profile.email);
     els.authWelcome.textContent = `Signed in as ${profile.email}. Pick a username to finish setting up your account.`;
-    els.usernameInput.value = existing?.username || suggestUsername(profile);
-    validateUsername();
+    els.usernameInput.value = existing?.username || (await suggestUsername(profile));
+    await validateUsername();
     els.usernameInput.focus();
     els.usernameInput.select();
   }
 
-  function suggestUsername(profile) {
+  async function suggestUsername(profile) {
     const base =
       (profile.name || profile.email.split("@")[0])
         .toLowerCase()
@@ -265,14 +301,14 @@
         .slice(0, 16) || "user";
     let candidate = base;
     let n = 1;
-    while (isUsernameTaken(candidate, null)) {
+    while (await isUsernameTaken(candidate, null)) {
       candidate = `${base}${n}`;
       n++;
     }
     return candidate;
   }
 
-  function validateUsername() {
+  async function validateUsername() {
     const value = els.usernameInput.value.trim();
 
     if (!value) {
@@ -287,7 +323,14 @@
     }
 
     const emailLower = pendingProfile ? pendingProfile.email.toLowerCase() : null;
-    if (isUsernameTaken(value, emailLower)) {
+    setUsernameStatus("checking", "Checking availability…");
+    const taken = await isUsernameTaken(value, emailLower);
+
+    // The field may have changed while the check was in flight — bail out
+    // rather than showing a stale result.
+    if (els.usernameInput.value.trim() !== value) return;
+
+    if (taken) {
       setUsernameStatus("taken", "That username is already taken — try another.");
       els.usernameSubmit.disabled = true;
       return;
@@ -298,20 +341,20 @@
   }
 
   function setUsernameStatus(state, message) {
-    els.usernameStatus.textContent = state === "available" ? "✓" : state ? "✕" : "";
+    els.usernameStatus.textContent = state === "available" ? "✓" : state && state !== "checking" ? "✕" : "";
     els.usernameStatus.className = `username-field__status username-field__status--${state}`;
     els.usernameHint.textContent = message || "3–20 characters: letters, numbers, and underscores only.";
     els.usernameHint.classList.toggle("username-hint--error", state === "taken" || state === "invalid");
   }
 
-  function submitUsername() {
+  async function submitUsername() {
     if (els.usernameSubmit.disabled || !pendingProfile) return;
 
     const username = els.usernameInput.value.trim();
     const emailLower = pendingProfile.email.toLowerCase();
-    const users = getUsers();
+    const users = await window.KnotStore.getAllUsers();
 
-    users[emailLower] = {
+    const newUser = {
       email: pendingProfile.email,
       name: pendingProfile.name || "",
       picture: pendingProfile.picture || "",
@@ -319,7 +362,8 @@
       createdAt: users[emailLower]?.createdAt || new Date().toISOString()
     };
 
-    saveUsers(users);
+    await window.KnotStore.saveUser(emailLower, newUser);
+    cacheCurrentUser(newUser);
     setSessionEmail(emailLower);
     pendingProfile = null;
     closeAuthModal();
@@ -392,6 +436,7 @@
   function init() {
     cacheEls();
     renderAuthArea();
+    refreshCurrentUserFromStore();
     initGoogleAuth();
 
     els.authClose.addEventListener("click", closeAuthModal);
@@ -443,7 +488,7 @@
   window.KnotAuth = {
     getCurrentUser,
     updateCurrentUser,
-    getAllUsers: getUsers,
+    getAllUsers: () => window.KnotStore.getAllUsers(),
     getSessionEmail
   };
 
