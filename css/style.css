@@ -14,23 +14,24 @@
   --text-secondary: #a6acc4;
   --text-muted: #6c7290;
 
-  --accent: #7c5cff;
-  --accent-2: #35e0c9;
-  --accent-3: #ff6b9d;
-  --gradient: linear-gradient(135deg, var(--accent) 0%, #4a7bff 55%, var(--accent-2) 100%);
-
   --brand-tangerine: #ff7733;
   --brand-cinnabar: #e63b2e;
   --gradient-logo: linear-gradient(135deg, var(--brand-tangerine) 0%, var(--brand-cinnabar) 100%);
+
+  --accent: var(--brand-tangerine);
+  --accent-2: var(--brand-cinnabar);
+  --accent-3: #ff6b9d;
+  --gradient: var(--gradient-logo);
 
   --radius-sm: 10px;
   --radius-md: 16px;
   --radius-lg: 24px;
 
   --shadow-soft: 0 10px 40px rgba(0, 0, 0, 0.35);
-  --shadow-glow: 0 0 0 1px rgba(124, 92, 255, 0.15), 0 20px 60px rgba(124, 92, 255, 0.15);
+  --shadow-glow: 0 0 0 1px rgba(255, 119, 51, 0.18), 0 20px 60px rgba(255, 119, 51, 0.18);
 
-  --grid-line: rgba(255, 255, 255, 0.09);
+  --grid-line: rgba(255, 255, 255, 0.16);
+  --grid-line-accent: rgba(255, 119, 51, 0.14);
   --navbar-bg: rgba(6, 7, 13, 0.72);
 
   --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
@@ -51,15 +52,16 @@
   --text-secondary: #4c5169;
   --text-muted: #767c94;
 
-  --accent: #6a4cf0;
-  --accent-2: #0d9488;
+  --accent: var(--brand-tangerine);
+  --accent-2: var(--brand-cinnabar);
   --accent-3: #db2f77;
-  --gradient: linear-gradient(135deg, var(--accent) 0%, #3f63e0 55%, var(--accent-2) 100%);
+  --gradient: var(--gradient-logo);
 
   --shadow-soft: 0 10px 40px rgba(20, 21, 45, 0.1);
-  --shadow-glow: 0 0 0 1px rgba(106, 76, 240, 0.15), 0 20px 60px rgba(106, 76, 240, 0.12);
+  --shadow-glow: 0 0 0 1px rgba(255, 119, 51, 0.18), 0 20px 60px rgba(255, 119, 51, 0.14);
 
-  --grid-line: rgba(20, 21, 40, 0.06);
+  --grid-line: rgba(20, 21, 40, 0.13);
+  --grid-line-accent: rgba(230, 59, 46, 0.1);
   --navbar-bg: rgba(245, 246, 251, 0.72);
 }
 
@@ -111,12 +113,6 @@ select, input {
   color: transparent;
 }
 
-.brand__text.accent {
-  background: var(--gradient-logo);
-  -webkit-background-clip: text;
-  background-clip: text;
-}
-
 /* ---------- Background flourishes ---------- */
 .bg-grid {
   position: fixed;
@@ -124,9 +120,11 @@ select, input {
   z-index: -2;
   background-image:
     linear-gradient(var(--grid-line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-  background-size: 56px 56px;
-  mask-image: radial-gradient(ellipse 140% 100% at 50% 0%, #000 55%, transparent 100%);
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(var(--grid-line-accent) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line-accent) 1px, transparent 1px);
+  background-size: 56px 56px, 56px 56px, 224px 224px, 224px 224px;
+  mask-image: radial-gradient(ellipse 150% 120% at 50% 0%, #000 72%, transparent 100%);
 }
 
 .bg-glow {
@@ -363,7 +361,7 @@ body.intro-active {
 
 .navbar__cta:hover {
   transform: translateY(-1px);
-  box-shadow: 0 8px 24px rgba(124, 92, 255, 0.35);
+  box-shadow: 0 8px 24px rgba(255, 119, 51, 0.35);
 }
 
 @media (max-width: 760px) {
@@ -628,7 +626,7 @@ body.intro-active {
 
 .auth-demo-note code {
   color: var(--accent-2);
-  background: rgba(53, 224, 201, 0.1);
+  background: rgba(230, 59, 46, 0.1);
   padding: 1px 5px;
   border-radius: 4px;
   font-size: 0.72rem;
@@ -725,7 +723,7 @@ body.intro-active {
 
 .auth-submit:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(124, 92, 255, 0.35);
+  box-shadow: 0 12px 28px rgba(255, 119, 51, 0.35);
 }
 
 .auth-submit:disabled {
@@ -953,12 +951,35 @@ body.intro-active {
   50% { transform: translate(16px, -20px) scale(1.07); }
 }
 
+.hero__geo {
+  position: absolute;
+  color: var(--accent);
+  opacity: 0.5;
+  animation: heroGeoFloat 7.5s ease-in-out infinite;
+}
+
+.hero__geo svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.hero__geo--1 { left: 6%; top: 16%; width: 34px; height: 34px; animation-delay: 0s; }
+.hero__geo--2 { right: 8%; top: 22%; width: 22px; height: 22px; color: var(--accent-2); animation-delay: -2s; }
+.hero__geo--3 { left: 14%; bottom: 6%; width: 26px; height: 26px; animation-delay: -4s; }
+.hero__geo--4 { right: 12%; bottom: 10%; width: 18px; height: 18px; color: var(--accent-2); animation-delay: -5.5s; }
+
+@keyframes heroGeoFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-14px) rotate(8deg); }
+}
+
 @media (max-width: 720px) {
   .hero__decor { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero__blob { animation: none; }
+  .hero__blob, .hero__geo { animation: none; }
 }
 
 .pill {
@@ -1082,7 +1103,7 @@ body.intro-active {
 .tag-btn:hover {
   border-color: var(--accent);
   color: var(--text-primary);
-  background: rgba(124, 92, 255, 0.1);
+  background: rgba(255, 119, 51, 0.1);
 }
 
 /* ---------- Stats ---------- */
@@ -1149,6 +1170,18 @@ body.intro-active {
   font-family: var(--font-display);
   font-size: 1.9rem;
   margin-bottom: 6px;
+}
+
+.explore__header h2::before,
+.register__text h2::before,
+.profile-section h3::before {
+  content: "";
+  display: block;
+  width: 32px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--gradient);
+  margin-bottom: 12px;
 }
 
 .explore__header p {
@@ -1279,7 +1312,7 @@ body.intro-active {
 .school-card:hover,
 .school-card:focus-visible {
   transform: translateY(-3px);
-  border-color: rgba(124, 92, 255, 0.45);
+  border-color: rgba(255, 119, 51, 0.45);
   background: var(--surface-hover);
   box-shadow: var(--shadow-glow);
   outline: none;
@@ -1405,8 +1438,8 @@ body.intro-active {
 }
 
 @keyframes cardHighlight {
-  0%, 100% { box-shadow: var(--shadow-glow); border-color: rgba(53, 224, 201, 0.6); }
-  50% { box-shadow: 0 0 0 1px rgba(53, 224, 201, 0.3), 0 20px 60px rgba(53, 224, 201, 0.25); border-color: rgba(53, 224, 201, 0.9); }
+  0%, 100% { box-shadow: var(--shadow-glow); border-color: rgba(230, 59, 46, 0.6); }
+  50% { box-shadow: 0 0 0 1px rgba(230, 59, 46, 0.3), 0 20px 60px rgba(230, 59, 46, 0.25); border-color: rgba(230, 59, 46, 0.9); }
 }
 
 .school-card--new {
@@ -1417,9 +1450,9 @@ body.intro-active {
   font-size: 0.72rem;
   padding: 4px 10px;
   border-radius: 999px;
-  background: rgba(53, 224, 201, 0.1);
+  background: rgba(230, 59, 46, 0.1);
   color: var(--accent-2);
-  border: 1px solid rgba(53, 224, 201, 0.2);
+  border: 1px solid rgba(230, 59, 46, 0.2);
 }
 
 .tag--muted {
@@ -1486,7 +1519,7 @@ body.intro-active {
   flex-wrap: wrap;
   padding: 44px;
   border-radius: var(--radius-lg);
-  background: linear-gradient(135deg, rgba(124, 92, 255, 0.12), rgba(53, 224, 201, 0.08));
+  background: linear-gradient(135deg, rgba(255, 119, 51, 0.12), rgba(230, 59, 46, 0.08));
   border: 1px solid var(--border-strong);
 }
 
@@ -1515,7 +1548,7 @@ body.intro-active {
 
 .register__btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(124, 92, 255, 0.35);
+  box-shadow: 0 12px 30px rgba(255, 119, 51, 0.35);
 }
 
 /* ---------- Footer ---------- */
@@ -1781,7 +1814,7 @@ body.intro-active {
   font-size: 0.7rem;
   padding: 2px 8px;
   border-radius: 999px;
-  background: rgba(124, 92, 255, 0.14);
+  background: rgba(255, 119, 51, 0.14);
   color: #c9bfff;
   font-weight: 600;
 }
@@ -1803,7 +1836,7 @@ body.intro-active {
   font-size: 0.7rem;
   padding: 2px 8px;
   border-radius: 999px;
-  background: rgba(53, 224, 201, 0.14);
+  background: rgba(230, 59, 46, 0.14);
   color: var(--accent-2);
   font-weight: 600;
 }
@@ -1833,7 +1866,7 @@ body.intro-active {
 
 .club-join__btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgba(124, 92, 255, 0.3);
+  box-shadow: 0 8px 20px rgba(255, 119, 51, 0.3);
 }
 
 .club-join__form {
@@ -2175,7 +2208,7 @@ body.intro-active {
 .add-club-btn:hover {
   border-color: var(--accent);
   color: var(--text-primary);
-  background: rgba(124, 92, 255, 0.08);
+  background: rgba(255, 119, 51, 0.08);
 }
 
 .register-form__error {
@@ -2198,7 +2231,7 @@ body.intro-active {
 
 .register-form__submit:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(124, 92, 255, 0.35);
+  box-shadow: 0 12px 28px rgba(255, 119, 51, 0.35);
 }
 
 @media (max-width: 640px) {
@@ -2490,8 +2523,8 @@ body.intro-active {
 }
 
 .profile-btn--edit:hover {
-  background: rgba(53, 224, 201, 0.1);
-  border-color: rgba(53, 224, 201, 0.4);
+  background: rgba(230, 59, 46, 0.1);
+  border-color: rgba(230, 59, 46, 0.4);
 }
 
 .profile-btn--delete {
