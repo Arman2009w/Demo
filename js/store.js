@@ -41,13 +41,13 @@
   "use strict";
 
   const FIREBASE_CONFIG = {
-    apiKey: "",
-    authDomain: "",
-    projectId: "",
-    storageBucket: "",
-    messagingSenderId: "",
-    appId: ""
-  };
+  apiKey: "AIzaSyCWLcisXHny6ZGbcocI2CIAKjkrIILuxg",
+  authDomain: "knot--web-app.firebaseapp.com",
+  projectId: "knot--web-app",
+  storageBucket: "knot--web-app.firebasestorage.app",
+  messagingSenderId: "543398083203",
+  appId: "1:543398083203:web:9495a657286bfee9ba79b6"
+};
 
   const FIREBASE_SDK_VERSION = "10.13.0";
   const isConfigured = Boolean(FIREBASE_CONFIG.apiKey && FIREBASE_CONFIG.projectId);
