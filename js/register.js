@@ -116,7 +116,6 @@
     row.className = "club-row";
     row.innerHTML = `
       <div class="club-row__grid">
-        <input type="text" class="club-icon" maxlength="4" placeholder="🎯" value="${escapeAttr(data?.icon)}" />
         <input type="text" class="club-name" maxlength="60" placeholder="Club name" value="${escapeAttr(data?.name)}" />
         <input type="text" class="club-category" maxlength="40" placeholder="Category" list="clubCategoryList" value="${escapeAttr(data?.category)}" />
       </div>
@@ -147,7 +146,6 @@
     const rows = Array.from(els.clubRows.querySelectorAll(".club-row"));
     return rows
       .map((row) => ({
-        icon: row.querySelector(".club-icon").value.trim() || "🎯",
         name: row.querySelector(".club-name").value.trim(),
         category: row.querySelector(".club-category").value.trim() || "General",
         meets: row.querySelector(".club-meets").value.trim() || "TBD",

@@ -1755,10 +1755,6 @@ body.intro-active {
   margin-bottom: 8px;
 }
 
-.club-card__icon {
-  font-size: 1.4rem;
-}
-
 .club-card__header h4 {
   font-size: 0.95rem;
   margin-bottom: 2px;
@@ -2094,7 +2090,7 @@ body.intro-active {
 
 .club-row__grid {
   display: grid;
-  grid-template-columns: 60px 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 10px;
   margin-bottom: 10px;
 }
@@ -2107,15 +2103,11 @@ body.intro-active {
   color: var(--text-primary);
   font-size: 0.82rem;
   outline: none;
-  text-align: center;
+  text-align: left;
 }
 
 .club-row__grid input:focus {
   border-color: var(--accent);
-}
-
-.club-row__grid input:not(:first-child) {
-  text-align: left;
 }
 
 .club-row__line {
@@ -2508,11 +2500,6 @@ body.intro-active {
   border-radius: var(--radius-md);
   background: var(--surface);
   border: 1px solid var(--border);
-}
-
-.profile-club__icon {
-  font-size: 1.4rem;
-  flex-shrink: 0;
 }
 
 .profile-club__body {

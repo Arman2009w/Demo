@@ -1,5 +1,5 @@
 /**
- * Shared club-row editor — builds the repeatable "club row" UI (icon, name,
+ * Shared club-row editor — builds the repeatable "club row" UI (name,
  * category, meets, description + remove button) used by any form that edits
  * a school's club list. js/register.js keeps its own copy of this (it
  * predates this file and already works); js/profile.js's edit-school form
@@ -22,7 +22,6 @@
       row.className = "club-row";
       row.innerHTML = `
         <div class="club-row__grid">
-          <input type="text" class="club-icon" maxlength="4" placeholder="🎯" value="${escapeAttr(data?.icon)}" />
           <input type="text" class="club-name" maxlength="60" placeholder="Club name" value="${escapeAttr(data?.name)}" />
           <input type="text" class="club-category" maxlength="40" placeholder="Category" list="clubCategoryList" value="${escapeAttr(data?.category)}" />
         </div>
@@ -51,7 +50,6 @@
     function collectClubs() {
       return Array.from(container.querySelectorAll(".club-row"))
         .map((row) => ({
-          icon: row.querySelector(".club-icon").value.trim() || "🎯",
           name: row.querySelector(".club-name").value.trim(),
           category: row.querySelector(".club-category").value.trim() || "General",
           meets: row.querySelector(".club-meets").value.trim() || "TBD",

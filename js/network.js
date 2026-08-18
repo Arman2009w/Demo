@@ -220,7 +220,7 @@
           ? `<div class="friend-card__section"><h5>Clubs joined</h5>${clubs
               .map(
                 ({ school, club }) => `
-                <p class="friend-card__item">${club.icon || "🏷️"} <strong>${escapeHtml(club.name)}</strong> — ${escapeHtml(school.name)}</p>
+                <p class="friend-card__item"><strong>${escapeHtml(club.name)}</strong> — ${escapeHtml(school.name)}</p>
               `
               )
               .join("")}</div>`

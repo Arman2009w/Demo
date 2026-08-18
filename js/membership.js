@@ -46,7 +46,7 @@
       ? `<button class="club-join__btn" type="button" data-club-key="${clubKey}" data-club-name="${escapeHtml(clubName)}" data-quick="1">Join as @${escapeHtml(user.username)}</button>`
       : `<button class="club-join__btn" type="button" data-club-key="${clubKey}" data-club-name="${escapeHtml(clubName)}">Join this club</button>`;
     return `
-      <p class="club-join__note">🌍 ${escapeHtml(joinNote)}</p>
+      <p class="club-join__note">${escapeHtml(joinNote)}</p>
       ${joinBtn}
     `;
   }

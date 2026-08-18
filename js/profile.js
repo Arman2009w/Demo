@@ -196,7 +196,6 @@
       .map(
         ({ school, club, key }) => `
         <div class="profile-club">
-          <span class="profile-club__icon">${club.icon}</span>
           <div class="profile-club__body">
             <h4>${escapeHtml(club.name)}</h4>
             <p>${escapeHtml(school.name)} · ${escapeHtml(club.category)}</p>

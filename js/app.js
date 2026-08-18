@@ -438,15 +438,14 @@
         return `
         <div class="club-card">
           <div class="club-card__header">
-            <span class="club-card__icon">${club.icon}</span>
             <div>
               <h4>${escapeHtml(club.name)}</h4>
               <span class="club-card__category">${escapeHtml(club.category)}</span>
-              ${club.openMembership ? '<span class="club-card__open-badge">🌍 Open worldwide</span>' : ""}
+              ${club.openMembership ? '<span class="club-card__open-badge">Open worldwide</span>' : ""}
             </div>
           </div>
           <p class="club-card__desc">${escapeHtml(club.description)}</p>
-          <p class="club-card__meets">🕒 ${escapeHtml(club.meets)}</p>
+          <p class="club-card__meets">${escapeHtml(club.meets)}</p>
           ${joinBlock}
         </div>
       `;
