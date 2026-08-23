@@ -4,6 +4,12 @@
 
 🔗 **Live site:** [knot-web-app.vercel.app](https://knot-web-app.vercel.app/)
 
+## Screenshots
+
+| Homepage | Explore the registry | Network |
+|---|---|---|
+| ![Homepage](screenshots/home.png) | ![Explore the registry](screenshots/explore.png) | ![Network](screenshots/network.png) |
+
 ## What it is
 
 Knot ties together a registered directory of schools from around the world so you can browse the clubs they offer, join them, register your own school, build a profile, and connect with friends elsewhere in the network.
