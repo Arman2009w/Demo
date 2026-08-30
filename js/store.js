@@ -190,17 +190,35 @@
     return firestoreReadyPromise;
   }
 
+  // Reads happen during page init (app.js/profile.js/network.js all await
+  // one before doing anything else) — if Firestore is briefly unreachable
+  // (offline, a blocked script, a transient network error) an uncaught
+  // rejection here would abort that whole init function, leaving the page
+  // completely blank/non-interactive instead of just missing the
+  // shared/remote data. safeRead() bounds that failure to "act like there's
+  // nothing there yet" instead of "the page never finishes loading."
+  async function safeRead(fn, fallback) {
+    try {
+      return await fn();
+    } catch (e) {
+      console.warn("Knot: Firestore read failed, falling back to empty result.", e);
+      return fallback;
+    }
+  }
+
   const FirestoreBackend = {
     isRemote: true,
 
     async getAllUsers() {
-      const db = await initFirestore();
-      const snap = await db.collection("users").get();
-      const users = {};
-      snap.forEach((doc) => {
-        users[doc.id] = doc.data();
-      });
-      return users;
+      return safeRead(async () => {
+        const db = await initFirestore();
+        const snap = await db.collection("users").get();
+        const users = {};
+        snap.forEach((doc) => {
+          users[doc.id] = doc.data();
+        });
+        return users;
+      }, {});
     },
     async saveUser(email, user) {
       const db = await initFirestore();
@@ -208,9 +226,11 @@
     },
 
     async getCustomSchools() {
-      const db = await initFirestore();
-      const snap = await db.collection("customSchools").get();
-      return snap.docs.map((doc) => doc.data());
+      return safeRead(async () => {
+        const db = await initFirestore();
+        const snap = await db.collection("customSchools").get();
+        return snap.docs.map((doc) => doc.data());
+      }, []);
     },
     async addCustomSchool(school) {
       const db = await initFirestore();
@@ -226,13 +246,15 @@
     },
 
     async getMemberships() {
-      const db = await initFirestore();
-      const snap = await db.collection("memberships").get();
-      const memberships = {};
-      snap.forEach((doc) => {
-        memberships[doc.id] = doc.data();
-      });
-      return memberships;
+      return safeRead(async () => {
+        const db = await initFirestore();
+        const snap = await db.collection("memberships").get();
+        const memberships = {};
+        snap.forEach((doc) => {
+          memberships[doc.id] = doc.data();
+        });
+        return memberships;
+      }, {});
     },
     async saveMembership(key, membership) {
       const db = await initFirestore();
@@ -253,9 +275,11 @@
     },
 
     async getFriends(email) {
-      const db = await initFirestore();
-      const doc = await db.collection("friends").doc(email).get();
-      return doc.exists ? doc.data().emails || [] : [];
+      return safeRead(async () => {
+        const db = await initFirestore();
+        const doc = await db.collection("friends").doc(email).get();
+        return doc.exists ? doc.data().emails || [] : [];
+      }, []);
     },
     async addFriend(emailA, emailB) {
       const db = await initFirestore();
@@ -275,15 +299,17 @@
     },
 
     async getInvitesFor(email) {
-      const db = await initFirestore();
-      const [toSnap, fromSnap] = await Promise.all([
-        db.collection("invites").where("toEmail", "==", email).get(),
-        db.collection("invites").where("fromEmail", "==", email).get()
-      ]);
-      const seen = new Map();
-      toSnap.forEach((doc) => seen.set(doc.id, { id: doc.id, ...doc.data() }));
-      fromSnap.forEach((doc) => seen.set(doc.id, { id: doc.id, ...doc.data() }));
-      return Array.from(seen.values());
+      return safeRead(async () => {
+        const db = await initFirestore();
+        const [toSnap, fromSnap] = await Promise.all([
+          db.collection("invites").where("toEmail", "==", email).get(),
+          db.collection("invites").where("fromEmail", "==", email).get()
+        ]);
+        const seen = new Map();
+        toSnap.forEach((doc) => seen.set(doc.id, { id: doc.id, ...doc.data() }));
+        fromSnap.forEach((doc) => seen.set(doc.id, { id: doc.id, ...doc.data() }));
+        return Array.from(seen.values());
+      }, []);
     },
     async addInvite(invite) {
       const db = await initFirestore();
